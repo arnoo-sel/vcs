@@ -60,8 +60,6 @@ static const std::unordered_map<std::string, QKeySequence> KEY_SEQUENCES = {
     {"overlay-dialog: toggle-enabled", QKeySequence("ctrl+shift+l")},
 
     {"anti-tear-dialog: toggle-enabled", QKeySequence("ctrl+shift+a")},
-
-    {"record-dialog: toggle-enabled", QKeySequence("ctrl+shift+r")},
 };
 
 #define ASSERT_LABEL_VALIDITY(label) \

@@ -127,7 +127,7 @@ VCS is [available on GitHub](https://github.com/leikareipa/vcs).
         <tr>
             <th>GPU</th>
             <td>
-                For hardware rendering (optional), a graphics card with support for OpenGL 1.2
+                For hardware rendering (optional), a graphics card supporting OpenGL 1.2
             </td>
         </tr>
         <tr>

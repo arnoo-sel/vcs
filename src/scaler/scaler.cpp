@@ -19,7 +19,6 @@
 #include "filter/filter.h"
 #include "filter/abstract_filter.h"
 #include "filter/filters/output_scaler/filter_output_scaler.h"
-#include "record/record.h"
 #include "scaler/scaler.h"
 #include "common/timer/timer.h"
 #include <opencv2/imgproc/imgproc.hpp>
@@ -76,14 +75,6 @@ resolution_s ks_base_resolution(void)
 //
 resolution_s ks_output_resolution(void)
 {
-    // While recording video, the output resolution is required to stay locked
-    // to the video resolution.
-    if (krecord_is_recording())
-    {
-        const auto r = krecord_video_resolution();
-        return {r.w, r.h, OUTPUT_BIT_DEPTH};
-    }
-
     if (IS_CUSTOM_SCALER_ACTIVE)
     {
         return CUSTOM_SCALER_FILTER_RESOLUTION;

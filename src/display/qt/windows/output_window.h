@@ -17,7 +17,6 @@ class VideoPresetsDialog;
 class FilterGraphDialog;
 class AntiTearDialog;
 class OverlayDialog;
-class RecordDialog;
 class SignalDialog;
 class AliasDialog;
 class AboutDialog;
@@ -75,7 +74,6 @@ public:
     VideoPresetsDialog* video_presets_dialog(void)         const { return this->videoPresetsDlg; }
     AntiTearDialog* anti_tear_dialog(void)                 const { return this->antitearDlg; }
     OverlayDialog* overlay_dialog(void)                    const { return this->overlayDlg; }
-    RecordDialog* recordDialog(void)                       const { return this->recordDlg; }
     SignalDialog* signal_info_dialog(void)                 const { return this->signalDlg; }
     AliasDialog* alias_resolutions_dialog(void)            const { return this->aliasDlg; }
     AboutDialog* about_dialog(void)                        const { return this->aboutDlg; }
@@ -116,7 +114,6 @@ private:
     FilterGraphDialog *filterGraphDlg = nullptr;
     AntiTearDialog *antitearDlg = nullptr;
     OverlayDialog *overlayDlg = nullptr;
-    RecordDialog *recordDlg = nullptr;
     SignalDialog *signalDlg = nullptr;
     AliasDialog *aliasDlg = nullptr;
     AboutDialog *aboutDlg = nullptr;

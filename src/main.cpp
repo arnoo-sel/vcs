@@ -22,7 +22,6 @@
 #include "display/display.h"
 #include "common/globals.h"
 #include "capture/alias.h"
-#include "record/record.h"
 #include "scaler/scaler.h"
 #include "filter/filter.h"
 #include "capture/video_presets.h"
@@ -46,17 +45,12 @@ static void cleanup_all(void)
     INFO(("Received orders to exit. Initiating cleanup."));
 
     kt_release_timers();
-    if (krecord_is_recording())
-    {
-        krecord_stop_recording();
-    }
     kd_release_output_window();
     ks_release_scaler();
     kc_release_capture();
     kat_release_anti_tear();
     kf_release_filters();
     kvideopreset_release();
-    krecord_release();
 
     INFO(("Ready to exit."));
     return;
@@ -105,7 +99,6 @@ static bool initialize_all(void)
 
     if (!PROGRAM_EXIT_REQUESTED) kt_initialize_timers();
     if (!PROGRAM_EXIT_REQUESTED) ka_initialize_aliases();
-    if (!PROGRAM_EXIT_REQUESTED) krecord_initialize();
     if (!PROGRAM_EXIT_REQUESTED) kvideopreset_initialize();
     if (!PROGRAM_EXIT_REQUESTED) ks_initialize_scaler();
     if (!PROGRAM_EXIT_REQUESTED) kc_initialize_capture();

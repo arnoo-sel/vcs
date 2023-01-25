@@ -111,7 +111,9 @@ Non-GUI code interacts with the GUI through a wrapper interface ([src/display/di
 
 #### OpenCV
 
-VCS uses the [OpenCV](https://opencv.org/) 3.2.0 library for image filtering/scaling and video recording. For Windows, the binary distribution of VCS includes a pre-compiled DLL compatible with MinGW 5.3. For Linux, you can get the OpenCV 3.2.0 source code [here](https://github.com/opencv/opencv/tree/3.2.0) and follow the build instructions [here](https://docs.opencv.org/3.2.0/d7/d9f/tutorial_linux_install.html) (maybe also see [this](https://stackoverflow.com/questions/46884682/error-in-building-opencv-with-ffmpeg) in case of build errors).
+VCS uses the [OpenCV](https://opencv.org/) 3.2.0 library for image processing. For Windows, the binary distribution of VCS includes a pre-compiled DLL compatible with MinGW 5.3. For Linux, you can get the OpenCV 3.2.0 source code [here](https://github.com/opencv/opencv/tree/3.2.0) and follow the build instructions [here](https://docs.opencv.org/3.2.0/d7/d9f/tutorial_linux_install.html) (maybe also see [this](https://stackoverflow.com/questions/46884682/error-in-building-opencv-with-ffmpeg) in case of build errors).
+
+Although not officially supported with VCS, versions of OpenCV newer than 3.2.0 may also work. See [this issue report](https://github.com/leikareipa/vcs/issues/30) for details.
 
 #### Datapath RGBEasy
 
@@ -133,7 +135,7 @@ VCS is a mostly single-threaded application whose event loop is synchronized to 
 
 ![](./images/diagrams/code-flow.png)
 
- The above diagram shows a general step-by-step view of VCS's program flow. `Capture` communicates with the capture device (which will typically be running in its own thread), receiving frame data and setting hardware-side capture parameters. `Main` polls `Capture` to receive information about capture events. When it receives a new frame from `Capture`, `Main` sends the frame's data to `Scale` for scaling, which then forwards it to `Filter` for image filtering, which in turn sends it to `Record` to be appended into a video file (if video recording is enabled) and then to `Display` to be rendered onto VCS's output window.
+ The above diagram shows a general step-by-step view of VCS's program flow. `Capture` communicates with the capture device (which will typically be running in its own thread), receiving frame data and setting hardware-side capture parameters. `Main` polls `Capture` to receive information about capture events. When it receives a new frame from `Capture`, `Main` sends the frame's data to `Scale` for scaling, which then forwards it to `Filter` for image filtering, which in turn sends it to `Display` to be rendered onto VCS's output window.
 
 | System  | Corresponding source code          |
 | ------- | ---------------------------------- |
@@ -141,5 +143,4 @@ VCS is a mostly single-threaded application whose event loop is synchronized to 
 | Capture | [src/capture/*](./src/capture/)    |
 | Scale   | [src/scaler/*](./src/scaler/)      |
 | Filter  | [src/filter/*](./src/filter/)      |
-| Record  | [src/record/*](./src/record/)      |
 | Display | [src/display/*](./src/display/)    |

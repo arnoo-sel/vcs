@@ -41,7 +41,6 @@
 #include "display/qt/dialogs/resolution_dialog.h"
 #include "display/qt/dialogs/anti_tear_dialog.h"
 #include "display/qt/dialogs/overlay_dialog.h"
-#include "display/qt/dialogs/record_dialog.h"
 #include "display/qt/windows/output_window.h"
 #include "display/qt/dialogs/alias_dialog.h"
 #include "display/qt/dialogs/about_dialog.h"
@@ -53,7 +52,6 @@
 #include "capture/capture.h"
 #include "capture/alias.h"
 #include "common/globals.h"
-#include "record/record.h"
 #include "scaler/scaler.h"
 #include "main.h"
 #include "ui_output_window.h"
@@ -102,7 +100,6 @@ MainWindow::MainWindow(QWidget *parent) :
         signalDlg = new SignalDialog;
         aliasDlg = new AliasDialog;
         aboutDlg = new AboutDialog;
-        recordDlg = new RecordDialog;
 
         this->dialogs << outputResolutionDlg
                       << inputResolutionDlg
@@ -112,8 +109,7 @@ MainWindow::MainWindow(QWidget *parent) :
                       << overlayDlg
                       << signalDlg
                       << aliasDlg
-                      << aboutDlg
-                      << recordDlg;
+                      << aboutDlg;
     }
 
     // Create the window's context menu.
@@ -354,11 +350,6 @@ MainWindow::MainWindow(QWidget *parent) :
             resolution->setShortcut(kd_get_key_sequence("output-window: open-output-resolution-dialog"));
             outputMenu->addAction(resolution);
             connect(resolution, &QAction::triggered, this, [=]{this->outputResolutionDlg->open();});
-
-            QAction *record = new QAction("Video recorder...", this);
-            record->setShortcut(kd_get_key_sequence("output-window: open-record-dialog"));
-            outputMenu->addAction(record);
-            connect(record, &QAction::triggered, this, [=]{this->recordDlg->open();});
         }
 
         QMenu *windowMenu = new QMenu("Window", this);
@@ -660,7 +651,6 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(makeAppwideShortcut("filter-graph-dialog: toggle-enabled"), &QShortcut::activated, [=]{this->filterGraphDlg->set_enabled(!this->filterGraphDlg->is_enabled());});
         connect(makeAppwideShortcut("overlay-dialog: toggle-enabled"), &QShortcut::activated, [=]{this->overlayDlg->set_enabled(!this->overlayDlg->is_enabled());});
         connect(makeAppwideShortcut("anti-tear-dialog: toggle-enabled"), &QShortcut::activated, [=]{this->antitearDlg->set_enabled(!this->antitearDlg->is_enabled());});
-        connect(makeAppwideShortcut("record-dialog: toggle-enabled"), &QShortcut::activated, [=]{this->recordDlg->set_enabled(!this->recordDlg->is_enabled());});
 
         // F1 through F12.
         for (uint i = 1; i <= 12; i++)
@@ -763,28 +753,6 @@ MainWindow::MainWindow(QWidget *parent) :
         kc_evNewVideoMode.listen([this](video_mode_s)
         {
             this->update_window_title();
-        });
-
-        krecord_evRecordingStarted.listen([this]
-        {
-            if (!PROGRAM_EXIT_REQUESTED)
-            {
-                this->update_window_title();
-            }
-        });
-
-        krecord_evRecordingEnded.listen([this]
-        {
-            if (!PROGRAM_EXIT_REQUESTED)
-            {
-                this->update_window_title();
-
-                // The output resolution might have changed while we were recording, but
-                // since we also prevent the size of the output window from changing while
-                // recording, we should now - that recording has stopped - tell the window
-                // to update its size to match the current proper output size.
-                this->update_window_size();
-            }
         });
 
         kc_evMissedFramesCount.listen([this](const unsigned numMissed)
@@ -1049,7 +1017,6 @@ bool MainWindow::is_mouse_wheel_scaling_allowed(void)
 {
     return (
         !kd_is_fullscreen() && // On my virtual machine, at least, wheel scaling while in full-screen messes up the full-screen mode.
-        !krecord_is_recording() &&
         !ks_is_custom_scaler_active()
     );
 }
@@ -1149,7 +1116,6 @@ void MainWindow::update_window_title(void)
         const refresh_rate_s refreshRate = kc_current_capture_state().input.refreshRate;
 
         QStringList programStatus;
-        if (recordDlg->is_enabled())      programStatus << "R";
         if (filterGraphDlg->is_enabled()) programStatus << "F";
         if (overlayDlg->is_enabled())     programStatus << "O";
         if (antitearDlg->is_enabled())    programStatus << "A";

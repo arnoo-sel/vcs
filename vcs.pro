@@ -15,7 +15,6 @@ linux {
         LIBS += \
             -L/usr/local/lib/ \
             -lopencv_imgproc \
-            -lopencv_videoio \
             -lopencv_highgui \
             -lopencv_core \
             -lopencv_photo
@@ -128,7 +127,6 @@ SOURCES += \
     src/anti_tear/anti_tear.cpp \
     src/display/qt/persistent_settings.cpp \
     src/common/memory/memory.cpp \
-    src/record/record.cpp \
     src/common/disk/disk.cpp \
     src/capture/alias.cpp \
     src/display/qt/subclasses/QOpenGLWidget_opengl_renderer.cpp \
@@ -137,7 +135,6 @@ SOURCES += \
     src/display/qt/subclasses/QGraphicsView_interactible_node_graph_view.cpp \
     src/display/qt/dialogs/filter_graph_dialog.cpp \
     src/display/qt/dialogs/about_dialog.cpp \
-    src/display/qt/dialogs/record_dialog.cpp \
     src/display/qt/dialogs/output_resolution_dialog.cpp \
     src/display/qt/dialogs/input_resolution_dialog.cpp \
     src/display/qt/subclasses/QTableWidget_property_table.cpp \
@@ -160,8 +157,6 @@ SOURCES += \
     src/capture/video_presets.cpp \
     src/common/disk/file_writers/file_writer_video_presets_version_a.cpp \
     src/common/disk/file_readers/file_reader_video_presets_version_a.cpp \
-    src/record/recording_buffer.cpp \
-    src/record/framerate_estimator.cpp \
     src/common/timer/timer.cpp \
     src/display/qt/dialogs/linux_device_selector_dialog.cpp
 
@@ -245,7 +240,6 @@ HEADERS += \
     src/common/disk/csv.h \
     src/common/memory/memory.h \
     src/common/memory/heap_mem.h \
-    src/record/record.h \
     src/common/disk/disk.h \
     src/capture/alias.h \
     src/display/qt/subclasses/QOpenGLWidget_opengl_renderer.h \
@@ -254,7 +248,6 @@ HEADERS += \
     src/display/qt/subclasses/QGraphicsView_interactible_node_graph_view.h \
     src/display/qt/dialogs/filter_graph_dialog.h \
     src/display/qt/dialogs/about_dialog.h \
-    src/display/qt/dialogs/record_dialog.h \
     src/display/qt/dialogs/output_resolution_dialog.h \
     src/display/qt/dialogs/input_resolution_dialog.h \
     src/display/display.h \
@@ -276,9 +269,6 @@ HEADERS += \
     src/common/disk/file_writers/file_writer_video_presets.h \
     src/common/disk/file_readers/file_reader_video_presets.h \
     src/common/propagate/vcs_event.h \
-    src/record/recording_buffer.h \
-    src/record/recording_meta.h \
-    src/record/framerate_estimator.h \
     src/common/timer/timer.h \
     src/display/qt/dialogs/linux_device_selector_dialog.h
 
@@ -291,7 +281,6 @@ FORMS += \
     src/display/qt/dialogs/ui/anti_tear_dialog.ui \
     src/display/qt/dialogs/ui/filter_graph_dialog.ui \
     src/display/qt/dialogs/ui/about_dialog.ui \
-    src/display/qt/dialogs/ui/record_dialog.ui \
     src/display/qt/dialogs/ui/output_resolution_dialog.ui \
     src/display/qt/dialogs/ui/input_resolution_dialog.ui \
     src/display/qt/dialogs/ui/signal_dialog.ui \

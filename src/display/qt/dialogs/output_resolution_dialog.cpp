@@ -3,7 +3,6 @@
 #include "common/propagate/vcs_event.h"
 #include "capture/capture.h"
 #include "common/globals.h"
-#include "record/record.h"
 #include "scaler/scaler.h"
 #include "ui_output_resolution_dialog.h"
 
@@ -117,19 +116,6 @@ OutputResolutionDialog::OutputResolutionDialog(QWidget *parent) :
                 ui->spinBox_outputResX->setValue(videoMode.resolution.w);
                 ui->spinBox_outputResY->setValue(videoMode.resolution.h);
             }
-        });
-
-        krecord_evRecordingStarted.listen([this]
-        {
-            // Disable any GUI functionality that would let the user change the current
-            // output size, since we want to keep the output resolution constant while
-            // recording.
-            this->disable_output_size_controls(true);
-        });
-
-        krecord_evRecordingEnded.listen([this]
-        {
-            this->disable_output_size_controls(false);
         });
 
         ks_evCustomScalerEnabled.listen([this]

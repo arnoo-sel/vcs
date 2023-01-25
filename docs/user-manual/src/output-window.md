@@ -63,19 +63,13 @@ The title bar may contain some or all of the following elements, from left to ri
             </td>
         </tr>
         <tr>
-            <td>RFOA</td>
+            <td>FOA</td>
             <td class="with-inline-table">
                 <dokki-table>
                     <table>
                         <tr>
                             <th>Element</th>
                             <th>Explanation</th>
-                        </tr>
-                        <tr>
-                            <td>R</td>
-                            <td>
-                                Shown when video recording is active (see <a href="#dialog-windows-video-recorder-dialog">Video recorder dialog</a>)
-                            </td>
                         </tr>
                         <tr>
                             <td>F</td>
