@@ -52,21 +52,29 @@ The VCS user's manual is available for the following versions of VCS:
 
 ### Developer's manual
 
-- [Pre-compiled](https://www.tarpeeksihyvaesoft.com/vcs/docs/developer-manual/) (updated with a delay)
 - [Source](./docs/developer-manual/)
+- [Pre-compiled](https://www.tarpeeksihyvaesoft.com/vcs/docs/developer-manual/) (updated with a delay)
 
 ## Building
 
-Run `$ qmake && make` in the repo's root; or open [vcs.pro](vcs.pro) in Qt Creator. See also [Dependencies](#dependencies).
+Run `$ qmake && make` in the repo's root; or open [vcs.pro](vcs.pro) in Qt Creator. You may need to modify some of the include paths in [vcs.pro](vcs.pro) to match your system.
 
-I use the following toolchains when working on VCS &ndash; sticking close to them should give you the least number of compatibility issues:
+### Dependencies
 
-| OS      | Compiler           | Qt   |
-| ------- | ------------------ | ---- |
-| Linux   | GCC 9.4 (64-bit)   | 5.12 |
-| Windows | MinGW 5.3 (32-bit) | 5.7  |
+The VCS codebase depends on the following third-party libraries and frameworks:
 
-Windows is VCS's primary platform for distribution, and the codebase needs to remain compatible with the Windows toolchain.
+1. Qt 5
+2. OpenCV 3.2.0*
+3. The Datapath capture API (RGBEasy on Windows, Vision/Video4Linux on Linux), as distributed with their capture drivers**
+
+\* Later versions of OpenCV may also work. See [this issue](https://github.com/leikareipa/vcs/issues/30) for details.\
+\** Only needed if compiling for Datapath hardware, which is the default option. See [The capture backend](#the-capture-backend) for details.
+
+I use the following toolchains when developing VCS:
+
+| OS      | Compiler           | Qt   | OpenCV |
+| ------- | ------------------ | ---- | ------ |
+| Linux   | GCC 9.4 (64-bit)   | 5.12 | 3.2.0  |
 
 ### Release build vs. debug build
 
@@ -90,44 +98,6 @@ The following capture backends are available:
 | CAPTURE_BACKEND_VISION_V4L  | Supports the Datapath VisionRGB range of capture cards on Linux; requires the Datapath Vision driver to be installed. |
 | CAPTURE_BACKEND_VIRTUAL     | Provides a device-independent capture source that generates a test image. Useful for debugging, and doesn't require capture drivers to be installed. |
 | CAPTURE_BACKEND_DOSBOX_MMAP | Allows capturing DOSBox's frame buffer on Linux. Intended for debugging. See [this blog post](https://www.tarpeeksihyvaesoft.com/blog/capturing-dosboxs-frame-buffer-via-shared-memory/) for details.|
-
-### Dependencies
-
-The VCS codebase depends on the following external libraries and frameworks:
-
-1. Qt
-2. OpenCV
-3. Datapath capture API (RGBEasy on Windows, Vision/Video4Linux on Linux)
-
-It's possible to build VCS with just Qt and none of the other dependencies by modifying certain flags in [vcs.pro](vcs.pro) (see the sections below for details), although this will generally produce a very feature-stripped version of the program.
-
-#### Qt
-
-VCS uses [Qt](https://www.qt.io/) for its GUI and certain other functionality. Qt >= 5.7 or newer should satisfy the requirements.
-
-Non-GUI code interacts with the GUI through a wrapper interface ([src/display/display.h](src/display/display.h), instantiated for Qt in [src/display/qt/d_main.cpp](src/display/qt/d_main.cpp)). If you wanted to implement the GUI with something other than Qt, you could do that by creating a new wrapper that implements this interface.
-
-**Note:** There's currently some bleeding of Qt functionality into non-GUI regions of the codebase, which you would need to deal with also if you wanted to fully excise Qt.
-
-#### OpenCV
-
-VCS uses the [OpenCV](https://opencv.org/) 3.2.0 library for image processing. For Windows, the binary distribution of VCS includes a pre-compiled DLL compatible with MinGW 5.3. For Linux, you can get the OpenCV 3.2.0 source code [here](https://github.com/opencv/opencv/tree/3.2.0) and follow the build instructions [here](https://docs.opencv.org/3.2.0/d7/d9f/tutorial_linux_install.html) (maybe also see [this](https://stackoverflow.com/questions/46884682/error-in-building-opencv-with-ffmpeg) in case of build errors).
-
-Although not officially supported with VCS, versions of OpenCV newer than 3.2.0 may also work. See [this issue report](https://github.com/leikareipa/vcs/issues/30) for details.
-
-#### Datapath RGBEasy
-
-On Windows, VCS uses the Datapath RGBEasy 1.0* API to interface with your VisionRGB capture device. The drivers for your Datapath capture card should include the required libraries, though you may need to adjust the paths to them in [vcs.pro](vcs.pro).
-
-\*As distributed with the VisionRGB-PRO driver package v8.1.2.
-
-To remove VCS's the dependency on RGBEasy, replace `CAPTURE_BACKEND_RGBEASY` with `CAPTURE_BACKEND_VIRTUAL` in [vcs.pro](vcs.pro). This will also disable capturing, but will let you run the program without the Datapath drivers/dependencies installed.
-
-#### Datapath Vision
-
-On Linux, VCS uses the Datapath Vision driver to interface with Datapath capture devices. You'll need to download and install the kernel module driver from Datapath's website (and re-install it every time your kernel updates).
-
-To remove VCS's the dependency on the Datapath Vision driver, replace `CAPTURE_BACKEND_VISION_V4L` with `CAPTURE_BACKEND_VIRTUAL` in [vcs.pro](vcs.pro). This will also disable capturing, but will let you run the program without the drivers installed.
 
 ## Program flow
 
