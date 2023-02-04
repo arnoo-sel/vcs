@@ -72,7 +72,7 @@ static void refresh_test_pattern(void)
                 {
                     const unsigned idx = (x + y * FRAME_BUFFER.r.w);
 
-                    ((uint16_t*)FRAME_BUFFER.pixels.data())[idx] = (
+                    ((uint16_t*)FRAME_BUFFER.pixels)[idx] = (
                         ((red   & 0xf8) << 8) |
                         ((green & 0xfc) << 3) |
                         (blue           >> 3)
@@ -84,7 +84,7 @@ static void refresh_test_pattern(void)
                 {
                     const unsigned idx = (x + y * FRAME_BUFFER.r.w);
 
-                    ((uint16_t*)FRAME_BUFFER.pixels.data())[idx] = (
+                    ((uint16_t*)FRAME_BUFFER.pixels)[idx] = (
                         ((alpha & 0x80) << 8) |
                         ((red   & 0xf8) << 7) |
                         ((green & 0xf8) << 2) |
@@ -122,7 +122,7 @@ bool kc_initialize_device(void)
 
     FRAME_BUFFER.r = {640, 480, 32};
     FRAME_BUFFER.pixelFormat = capture_pixel_format_e::rgb_888;
-    FRAME_BUFFER.pixels.allocate(MAX_NUM_BYTES_IN_CAPTURED_FRAME, "Capture frame buffer (virtual)");
+    FRAME_BUFFER.pixels = new uint8_t[MAX_NUM_BYTES_IN_CAPTURED_FRAME]();
 
     // Simulate the capturing of a new frame.
     kt_timer(std::round(1000 / TARGET_REFRESH_RATE), [](const unsigned)
@@ -160,7 +160,7 @@ bool kc_initialize_device(void)
 
 bool kc_release_device(void)
 {
-    FRAME_BUFFER.pixels.release();
+    delete [] FRAME_BUFFER.pixels;
 
     return true;
 }

@@ -14,7 +14,6 @@
 #include "display/display.h"
 #include "capture/capture.h"
 #include "common/globals.h"
-#include "common/memory/memory.h"
 #include "common/disk/csv.h"
 
 // The color depth we expect frames to be when they're fed into the anti-tear engine.

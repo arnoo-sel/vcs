@@ -170,9 +170,11 @@ static int capture_thread(void)
                 push_capture_event(capture_event_e::new_video_mode);
             }
 
-            memcpy(FRAME_BUFFER.pixels.data(),
-                   (char*)get_screen_buffer_value(screen_buffer_value_e::pixels_ptr),
-                   FRAME_BUFFER.pixels.size_check(frameWidth * frameHeight * 4));
+            memcpy(
+                FRAME_BUFFER.pixels,
+                (char*)get_screen_buffer_value(screen_buffer_value_e::pixels_ptr),
+                (frameWidth * frameHeight * 4)
+            );
 
             push_capture_event(capture_event_e::new_frame);
 
@@ -189,7 +191,7 @@ bool kc_initialize_device(void)
 
     FRAME_BUFFER.r = {640, 480, 32};
     FRAME_BUFFER.pixelFormat = capture_pixel_format_e::rgb_888;
-    FRAME_BUFFER.pixels.allocate(MAX_NUM_BYTES_IN_CAPTURED_FRAME, "Capture frame buffer (virtual)");
+    FRAME_BUFFER.pixels = new uint8_t[MAX_NUM_BYTES_IN_CAPTURED_FRAME]();
 
     // Initialize the shared memory interface.
     {
@@ -226,7 +228,7 @@ bool kc_initialize_device(void)
 
 bool kc_release_device(void)
 {
-    FRAME_BUFFER.pixels.release();
+    delete [] FRAME_BUFFER.pixels;
 
     RUN_CAPTURE_THREAD = false;
     CAPTURE_THREAD_FUTURE.wait();

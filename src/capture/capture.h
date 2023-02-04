@@ -78,7 +78,6 @@
 #include "common/globals.h"
 #include "scaler/scaler.h"
 #include "common/refresh_rate.h"
-#include "common/memory/heap_mem.h"
 #include "common/types.h"
 #include "common/propagate/vcs_event.h"
 
@@ -397,7 +396,7 @@ struct captured_frame_s
 
     capture_pixel_format_e pixelFormat;
 
-    heap_mem<u8> pixels;
+    uint8_t *pixels;
 
     // Will be set to true after the frame's data has been processed for
     // display and is no longer needed.

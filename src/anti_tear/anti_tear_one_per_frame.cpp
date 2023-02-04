@@ -74,7 +74,7 @@ int anti_tear_one_per_frame_c::find_first_new_row_idx(const anti_tear_frame_s *c
 
     // The image is expected to be filled in from bottom to top, so if
     // the first row is new, there can be no tear.
-    if (this->base->has_pixel_row_changed(startRow, frame->pixels.data(), this->base->frontBuffer, frame->resolution))
+    if (this->base->has_pixel_row_changed(startRow, frame->pixels, this->base->frontBuffer, frame->resolution))
     {
         return -1;
     }
@@ -87,7 +87,7 @@ int anti_tear_one_per_frame_c::find_first_new_row_idx(const anti_tear_frame_s *c
     // the vertical range in half in the direction of the tear.
     for (int curRow = (startRow + rowDelta); curRow != firstNewRow; curRow += rowDelta)
     {
-        const bool isNewRow = this->base->has_pixel_row_changed(curRow, frame->pixels.data(), this->base->frontBuffer, frame->resolution);
+        const bool isNewRow = this->base->has_pixel_row_changed(curRow, frame->pixels, this->base->frontBuffer, frame->resolution);
         const unsigned numRowsSkipped = std::abs(curRow - prevRow);
         const int sign = (isNewRow? -1 : 1);
 
@@ -107,7 +107,7 @@ void anti_tear_one_per_frame_c::visualize_current_tear(void)
     {
         const unsigned bpp = (frame.resolution.bpp / 8);
         const unsigned idx = (this->latestTearRow * frame.resolution.w * bpp);
-        std::memset((this->base->presentBuffer.pixels.data() + idx), 255, (frame.resolution.w * bpp));
+        std::memset((this->base->presentBuffer.pixels + idx), 255, (frame.resolution.w * bpp));
     }
 
     return;

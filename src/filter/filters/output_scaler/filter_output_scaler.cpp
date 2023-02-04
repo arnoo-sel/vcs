@@ -6,7 +6,6 @@
  */
 
 #include "filter/filters/output_scaler/filter_output_scaler.h"
-#include "common/memory/memory.h"
 #include "capture/capture.h"
 #include "scaler/scaler.h"
 #include <opencv2/imgproc/imgproc.hpp>
@@ -64,7 +63,7 @@ static void scale_using_opencv(
     const std::array<unsigned, 4> &padding,
     const cv::InterpolationFlags interpolator
 ){
-    static heap_mem<u8> scratch(MAX_NUM_BYTES_IN_OUTPUT_FRAME, "Output scaler scratch buffer");
+    static uint8_t *const scratch = new uint8_t[MAX_NUM_BYTES_IN_OUTPUT_FRAME]();
 
     const unsigned padTop = padding[0];
     const unsigned padRight = padding[1];
@@ -74,7 +73,7 @@ static void scale_using_opencv(
 
     if (padTop || padRight || padBottom || padLeft)
     {
-        cv::Mat dstUnpadded = cv::Mat(dstImage->resolution.h, dstImage->resolution.w, CV_8UC4, scratch.data());
+        cv::Mat dstUnpadded = cv::Mat(dstImage->resolution.h, dstImage->resolution.w, CV_8UC4, scratch);
         cv::resize(src, dstUnpadded, dstUnpadded.size(), 0, 0, interpolator);
 
         const unsigned paddedWidth = (dstImage->resolution.w + padLeft + padRight);

@@ -78,7 +78,7 @@ protected:
     // Buffers for constructing whole frames from torn ones. The back buffer
     // accumulates torn frame fragments, and the front buffer stores the latest
     // fully reconstructed frame.
-    heap_mem<u8> buffers[2];
+    uint8_t *buffers[2];
     u8 *backBuffer = nullptr;
     u8 *frontBuffer = nullptr;
 

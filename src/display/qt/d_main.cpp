@@ -52,7 +52,7 @@ void kd_recalculate_filter_graph_chains(void)
 
 void kd_acquire_output_window(void)
 {
-    DEBUG(("Acquiring a display."));
+    DEBUG(("Acquiring the display."));
 
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
     app_n::APP = new QApplication(app_n::ARGC, &app_n::ARGV);

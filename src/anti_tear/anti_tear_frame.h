@@ -10,34 +10,27 @@
 
 #include "common/globals.h"
 #include "common/assert.h"
-#include "common/memory/heap_mem.h"
 #include "display/display.h"
 
 struct anti_tear_frame_s
 {
     resolution_s resolution;
+    uint8_t *pixels;
 
-    heap_mem<u8> pixels;
-
-    anti_tear_frame_s(const resolution_s resolution = {0, 0, 0},
-                      u8 *const pixels = nullptr)
+    anti_tear_frame_s(const resolution_s resolution = {0, 0, 0}, u8 *const pixels = nullptr)
     {
         this->resolution = resolution;
-
-        if (pixels)
-        {
-            this->pixels.point_to(pixels, (resolution.w * resolution.h * (resolution.bpp / 8)));
-        }
-
-        return;
+        this->pixels = pixels;
     }
 
     bool is_valid(void)
     {
-        return (this->pixels.data() &&
-                (this->resolution.w <= MAX_OUTPUT_WIDTH) &&
-                (this->resolution.h <= MAX_OUTPUT_HEIGHT) &&
-                (this->resolution.bpp <= MAX_OUTPUT_BPP));
+        return (
+            this->pixels &&
+            (this->resolution.w <= MAX_OUTPUT_WIDTH) &&
+            (this->resolution.h <= MAX_OUTPUT_HEIGHT) &&
+            (this->resolution.bpp <= MAX_OUTPUT_BPP)
+        );
     }
 
     void flip_vertically(void)
@@ -53,9 +46,9 @@ struct anti_tear_frame_s
             const unsigned idx1 = (y * this->resolution.w * numBytesPerPixel);
             const unsigned idx2 = ((this->resolution.h - 1 - y) * this->resolution.w * numBytesPerPixel);
 
-            std::memcpy(&scratch,                    (this->pixels.data() + idx1), numBytesPerRow);
-            std::memcpy((this->pixels.data() + idx1), (this->pixels.data() + idx2), numBytesPerRow);
-            std::memcpy((this->pixels.data() + idx2), &scratch, numBytesPerRow);
+            std::memcpy(&scratch,                    (this->pixels + idx1), numBytesPerRow);
+            std::memcpy((this->pixels + idx1), (this->pixels + idx2), numBytesPerRow);
+            std::memcpy((this->pixels + idx2), &scratch, numBytesPerRow);
         }
 
         return;

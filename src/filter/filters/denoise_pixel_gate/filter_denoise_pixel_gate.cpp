@@ -6,7 +6,6 @@
  */
 
 #include "filter/filters/denoise_pixel_gate/filter_denoise_pixel_gate.h"
-#include "common/memory/heap_mem.h"
 #include "common/globals.h"
 
 // Reduces temporal image noise by requiring that pixels between frames vary by at
@@ -16,7 +15,7 @@ void filter_denoise_pixel_gate_c::apply(image_s *const image)
     this->assert_input_validity(image);
 
     const unsigned threshold = this->parameter(PARAM_THRESHOLD);
-    static heap_mem<uint8_t> prevPixels(MAX_NUM_BYTES_IN_CAPTURED_FRAME, "Denoising filter buffer");
+    static uint8_t *const prevPixels = new uint8_t[MAX_NUM_BYTES_IN_CAPTURED_FRAME]();
 
     for (unsigned i = 0; i < (image->resolution.h * image->resolution.w); i++)
     {

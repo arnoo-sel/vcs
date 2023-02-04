@@ -247,9 +247,7 @@ bool input_channel_v4l_c::capture_thread__get_next_frame(void)
             this->dstFrameBuffer->pixelFormat = this->captureStatus.pixelFormat;
 
             // Copy the frame's data into our local buffer so we can work on it.
-            memcpy(this->dstFrameBuffer->pixels.data(),
-                   srcBuffer.ptr,
-                   this->dstFrameBuffer->pixels.size_check(srcBuffer.length));
+            memcpy(this->dstFrameBuffer->pixels, srcBuffer.ptr, srcBuffer.length);
 
             this->captureStatus.numFramesCaptured++;
             this->push_capture_event(capture_event_e::new_frame);

@@ -8,7 +8,6 @@
 #include <cmath>
 #include "filter/filters/output_scaler/filter_output_scaler.h"
 #include "filter/filters/delta_histogram/filter_delta_histogram.h"
-#include "common/memory/heap_mem.h"
 #include "common/globals.h"
 
 // Draws a histogram indicating the amount by which pixel values differ between two consecutive
@@ -21,9 +20,10 @@ void filter_delta_histogram_c::apply(image_s *const image)
 
     static const unsigned numBins = 511; // Representing the range [-255,255].
     static const unsigned graphHeight = 256;
-    static heap_mem<uint8_t> prevFramePixels(MAX_NUM_BYTES_IN_CAPTURED_FRAME, "Delta histogram comparison buffer");
-    static heap_mem<uint8_t> scaledGraph(MAX_NUM_BYTES_IN_CAPTURED_FRAME, "Delta histogram scaled graph buffer");
-    static heap_mem<uint8_t> graph((numBins * graphHeight * 4), "Delta histogram graph buffer");
+    static const unsigned graphByteSize = (numBins * graphHeight * 4);
+    static uint8_t *const prevFramePixels = new uint8_t[MAX_NUM_BYTES_IN_CAPTURED_FRAME]();
+    static uint8_t *const scaledGraph = new uint8_t[MAX_NUM_BYTES_IN_CAPTURED_FRAME]();
+    static uint8_t *const graph = new uint8_t[graphByteSize]();
     static unsigned redBin[numBins];
     static unsigned greenBin[numBins];
     static unsigned blueBin[numBins];
@@ -50,15 +50,15 @@ void filter_delta_histogram_c::apply(image_s *const image)
         }
 
         std::memcpy(
-            prevFramePixels.data(),
+            prevFramePixels,
             image->pixels,
-            prevFramePixels.size_check(image->resolution.w * image->resolution.h * numColorChannels)
+            (image->resolution.w * image->resolution.h * numColorChannels)
         );
     }
 
     // Draw the bins into the histogram graph.
     {
-        memset(graph.data(), 0, graph.size());
+        memset(graph, 0, graphByteSize);
 
         for (unsigned x = 0; x < numBins; x++)
         {
@@ -84,8 +84,8 @@ void filter_delta_histogram_c::apply(image_s *const image)
 
     // Copy the histogram graph into the output image.
     {
-        const image_s graphImage = image_s(graph.data(), {numBins, graphHeight, 32});
-        image_s scaledGraphImage = image_s(scaledGraph.data(), image->resolution);
+        const image_s graphImage = image_s(graph, {numBins, graphHeight, 32});
+        image_s scaledGraphImage = image_s(scaledGraph, image->resolution);
 
         filter_output_scaler_c::nearest(graphImage, &scaledGraphImage);
 

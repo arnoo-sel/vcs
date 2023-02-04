@@ -21,7 +21,7 @@ void filter_frame_rate_c::apply(image_s *const image)
 {
     this->assert_input_validity(image);
 
-    static heap_mem<uint8_t> prevPixels(MAX_NUM_BYTES_IN_CAPTURED_FRAME, "Frame rate filter buffer");
+    static uint8_t *const prevPixels = new uint8_t[MAX_NUM_BYTES_IN_CAPTURED_FRAME]();
     static auto timeOfLastUpdate = std::chrono::system_clock::now();
     static unsigned numUniqueFrames = 0;
     static unsigned estimatedFPS = 0;
@@ -40,13 +40,13 @@ void filter_frame_rate_c::apply(image_s *const image)
         const unsigned imageByteSize = (image->resolution.w * image->resolution.h * imageBitsPerPixel);
         const unsigned start = (
             isSingleRow
-            ? (rowNumber * image->resolution.w * imageBitsPerPixel)
-            : 0
+                ? (rowNumber * image->resolution.w * imageBitsPerPixel)
+                : 0
         );
         const unsigned end = std::min(imageByteSize,
             isSingleRow
-            ? unsigned(start + (image->resolution.w * imageBitsPerPixel))
-            : imageByteSize
+                ? unsigned(start + (image->resolution.w * imageBitsPerPixel))
+                : imageByteSize
         );
 
         for (unsigned i = start; i < end; i += imageBitsPerPixel)
@@ -57,7 +57,7 @@ void filter_frame_rate_c::apply(image_s *const image)
                 (std::abs(int(image->pixels[i + 2]) - int(prevPixels[i + 2])) >= threshold)
             ){
                 numUniqueFrames++;
-                memcpy(prevPixels.data(), image->pixels, prevPixels.size_check(imageByteSize));
+                memcpy(prevPixels, image->pixels, imageByteSize);
                 break;
             }
         }

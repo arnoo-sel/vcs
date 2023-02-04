@@ -15,7 +15,6 @@
 #include "capture/capture.h"
 #include "display/display.h"
 #include "common/globals.h"
-#include "common/memory/memory.h"
 #include "filter/filter.h"
 #include "filter/abstract_filter.h"
 #include "filter/filters/output_scaler/filter_output_scaler.h"
@@ -150,7 +149,7 @@ void ks_initialize_scaler(void)
 
     cv::redirectError(cv_error_handler);
 
-    FRAME_BUFFER_PIXELS = (uint8_t*)kmem_allocate(MAX_NUM_BYTES_IN_OUTPUT_FRAME, "Scaler output buffer");
+    FRAME_BUFFER_PIXELS = new uint8_t[MAX_NUM_BYTES_IN_OUTPUT_FRAME]();
     FRAME_BUFFER_RESOLUTION = {0, 0, OUTPUT_BIT_DEPTH};
 
     ks_set_default_scaler(KNOWN_SCALERS.at(0).name);
@@ -191,7 +190,7 @@ void ks_release_scaler(void)
 {
     DEBUG(("Releasing the scaler."));
 
-    kmem_release((void**)&FRAME_BUFFER_PIXELS);
+    delete [] FRAME_BUFFER_PIXELS;
 
     return;
 }
@@ -201,7 +200,7 @@ static image_s frame_as_bgra_image(const captured_frame_s &frame)
     // RGB/888 frames are already in BGRA.
     if (frame.pixelFormat == capture_pixel_format_e::rgb_888)
     {
-        return {frame.pixels.data(), frame.r};
+        return {frame.pixels, frame.r};
     }
 
     k_assert_optional(
@@ -209,7 +208,7 @@ static image_s frame_as_bgra_image(const captured_frame_s &frame)
         "Was asked to convert a frame's color depth, but the scratch buffer was uninitialized."
     );
 
-    cv::Mat src = cv::Mat(frame.r.h, frame.r.w, CV_MAKETYPE(CV_8U,(frame.r.bpp / 8)), frame.pixels.data());
+    cv::Mat src = cv::Mat(frame.r.h, frame.r.w, CV_MAKETYPE(CV_8U,(frame.r.bpp / 8)), frame.pixels);
     cv::Mat scratchBuffer = cv::Mat(frame.r.h, frame.r.w, CV_8UC4, FRAME_BUFFER_PIXELS);
     const unsigned conversionType = ([&frame]
     {
@@ -236,9 +235,9 @@ static image_s frame_as_bgra_image(const captured_frame_s &frame)
     })();
 
     cv::cvtColor(src, scratchBuffer, conversionType);
-    std::memcpy(frame.pixels.data(), scratchBuffer.data, frame.pixels.size_check(scratchBuffer.total() * scratchBuffer.elemSize()));
+    std::memcpy(frame.pixels, scratchBuffer.data, (scratchBuffer.total() * scratchBuffer.elemSize()));
 
-    return {frame.pixels.data(), {frame.r.w, frame.r.h, 32}};
+    return {frame.pixels, {frame.r.w, frame.r.h, 32}};
 }
 
 // Takes the given image and scales it according to the scaler's current internal
@@ -268,7 +267,7 @@ void ks_scale_frame(const captured_frame_s &frame)
                     outputRes.w, outputRes.h, MAX_OUTPUT_WIDTH, MAX_OUTPUT_HEIGHT));
             return;
         }
-        else if (frame.pixels.data() == nullptr)
+        else if (!frame.pixels)
         {
             NBENE(("Was asked to scale a null frame. Ignoring it."));
             return;
