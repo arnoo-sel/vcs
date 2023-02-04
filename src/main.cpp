@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
 {
     printf("VCS %s\n", PROGRAM_VERSION_STRING);
 
-    #ifndef RELEASE_BUILD
+    #ifndef VCS_RELEASE_BUILD
         printf("NON-RELEASE BUILD\n");
     #endif
 

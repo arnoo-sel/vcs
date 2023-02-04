@@ -25,7 +25,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     {
         ui->groupBox_aboutVCS->setTitle("VCS " + QString(PROGRAM_VERSION_STRING));
 
-        #ifndef RELEASE_BUILD
+        #ifndef VCS_RELEASE_BUILD
             ui->groupBox_aboutVCS->setTitle(ui->groupBox_aboutVCS->title() + " (non-release build)");
         #endif
 

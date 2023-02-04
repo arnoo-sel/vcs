@@ -1,6 +1,6 @@
-# Whether this build of VCS is intended for release (defined) or is developmental,
-# non-stable etc. (undefined/commented out).
-#DEFINES += RELEASE_BUILD
+# Whether this build of VCS is intended for release. Release builds may perform better
+# but have fewer run-time error checks and contain less debug information.
+#DEFINES += VCS_RELEASE_BUILD
 
 linux {
     DEFINES += CAPTURE_BACKEND_VISION_V4L
@@ -38,17 +38,6 @@ win32 {
 
     RC_ICONS = "src/display/qt/images/icons/appicon.ico"
 }
-
-QT += core gui widgets opengl openglwidgets
-
-TARGET = vcs
-TEMPLATE = app
-CONFIG += console c++17
-
-OBJECTS_DIR = generated_files
-RCC_DIR = generated_files
-MOC_DIR = generated_files
-UI_DIR = generated_files
 
 INCLUDEPATH += \
     $$PWD/src/ \
@@ -198,6 +187,8 @@ HEADERS += \
     src/filter/filters/filters.h \
     src/filter/filters/flip/filter_flip.h \
     src/filter/filters/flip/gui/filtergui_flip.h \
+    src/filter/filters/eye_dropper/filter_eye_dropper.h \
+    src/filter/filters/eye_dropper/gui/filtergui_eye_dropper.h \
     src/filter/filters/output_scaler/filter_output_scaler.h \
     src/filter/filters/output_scaler/gui/filtergui_output_scaler.h \
     src/filter/filters/render_text/font.h \
@@ -311,12 +302,16 @@ contains(DEFINES, CAPTURE_BACKEND_RGBEASY) {
     }
 }
 
-# C++. For GCC/Clang/MinGW.
-QMAKE_CXXFLAGS += \
-    -g \
-    -O2 \
-    -Wall \
-    -pipe \
-    -pedantic \
-    -std=c++17 \
-    -Wno-missing-field-initializers
+QT += core gui widgets opengl openglwidgets
+TARGET = vcs
+TEMPLATE = app
+CONFIG += console release
+QMAKE_CXXFLAGS += -pedantic -std=c++17 -Wno-missing-field-initializers
+OBJECTS_DIR = generated_files
+RCC_DIR = generated_files
+MOC_DIR = generated_files
+UI_DIR = generated_files
+
+!contains(DEFINES, VCS_RELEASE_BUILD) {
+    CONFIG = $$replace(CONFIG, "release", "debug")
+}

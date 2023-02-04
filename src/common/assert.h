@@ -26,7 +26,7 @@
     }
 
 // Assertions in e.g. performance-critical code.
-#ifndef RELEASE_BUILD
+#ifndef VCS_RELEASE_BUILD
     #define k_assert_optional k_assert
 #else
     #define k_assert_optional(...)
