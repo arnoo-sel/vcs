@@ -314,4 +314,5 @@ UI_DIR = generated_files
 
 !contains(DEFINES, VCS_RELEASE_BUILD) {
     CONFIG = $$replace(CONFIG, "release", "debug")
+    CONFIG += sanitizer sanitize_address sanitize_undefined
 }
