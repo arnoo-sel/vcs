@@ -10,6 +10,7 @@
 #include <cstring>
 #include <vector>
 #include <cmath>
+#include <opencv2/imgproc/imgproc.hpp>
 #include "anti_tear/anti_tear.h"
 #include "common/propagate/vcs_event.h"
 #include "capture/capture.h"
@@ -20,7 +21,7 @@
 #include "filter/filters/output_scaler/filter_output_scaler.h"
 #include "scaler/scaler.h"
 #include "common/timer/timer.h"
-#include <opencv2/imgproc/imgproc.hpp>
+#include "main.h"
 
 vcs_event_c<const resolution_s&> ks_evNewOutputResolution;
 vcs_event_c<const image_s&> ks_evNewScaledImage;
@@ -183,14 +184,10 @@ void ks_initialize_scaler(void)
         NUM_FRAMES_SCALED_PER_SECOND = 0;
     });
 
-    return;
-}
-
-void ks_release_scaler(void)
-{
-    DEBUG(("Releasing the scaler."));
-
-    delete [] FRAME_BUFFER_PIXELS;
+    k_register_subsystem_releaser([]{
+        DEBUG(("Releasing the scaler subsystem."));
+        delete [] FRAME_BUFFER_PIXELS;
+    });
 
     return;
 }

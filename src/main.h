@@ -8,7 +8,11 @@
 #ifndef VCS_MAIN_H
 #define VCS_MAIN_H
 
+#include <vector>
+#include <functional>
 #include "common/propagate/vcs_event.h"
+
+typedef std::function<void()> subsystem_releaser_t;
 
 extern vcs_event_c<void> k_evEcoModeEnabled;
 extern vcs_event_c<void> k_evEcoModeDisabled;
@@ -16,5 +20,7 @@ extern vcs_event_c<void> k_evEcoModeDisabled;
 void k_set_eco_mode_enabled(const bool isEnabled);
 
 bool k_is_eco_mode_enabled(void);
+
+void k_register_subsystem_releaser(subsystem_releaser_t releaser);
 
 #endif

@@ -10,6 +10,7 @@
 #include "common/propagate/vcs_event.h"
 #include "capture/capture.h"
 #include "common/timer/timer.h"
+#include "main.h"
 
 vcs_event_c<const captured_frame_s&> kc_evNewCapturedFrame;
 vcs_event_c<const video_mode_s&> kc_evNewProposedVideoMode;
@@ -88,14 +89,10 @@ void kc_initialize_capture(void)
         CAPTURE_STATUS.hardwareChannelIdx = kc_get_device_input_channel_idx();
     });
 
-    return;
-}
-
-void kc_release_capture(void)
-{
-    DEBUG(("Releasing the capture subsystem."));
-
-    kc_release_device();
+    k_register_subsystem_releaser([]{
+        DEBUG(("Releasing the capture subsystem."));
+        kc_release_device();
+    });
 
     return;
 }

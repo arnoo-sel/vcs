@@ -10,6 +10,7 @@
 #include "common/propagate/vcs_event.h"
 #include "capture/video_presets.h"
 #include "capture/capture.h"
+#include "main.h"
 
 vcs_event_c<const video_preset_s*> kc_evVideoPresetParamsChanged;
 
@@ -59,6 +60,8 @@ static video_preset_s* strongest_activating_preset(void)
 
 void kvideopreset_initialize(void)
 {
+    DEBUG(("Initializing the video presets subsystem."));
+
     // Listen for app events.
     {
         kc_evNewVideoMode.listen(kvideopreset_apply_current_active_preset);
@@ -73,6 +76,11 @@ void kvideopreset_initialize(void)
             }
         });
     }
+
+    k_register_subsystem_releaser([]{
+        DEBUG(("Releasing the video presets subsystem."));
+        kvideopreset_remove_all_presets();
+    });
 
     return;
 }
@@ -89,13 +97,6 @@ bool kvideopreset_is_preset_active(const video_preset_s *const preset)
     }
 
     return (preset->id == activePreset->id);
-}
-
-void kvideopreset_release(void)
-{
-    kvideopreset_remove_all_presets();
-
-    return;
 }
 
 bool kvideopreset_remove_preset(const unsigned presetId)

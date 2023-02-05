@@ -32,6 +32,8 @@
 vcs_event_c<void> k_evEcoModeEnabled;
 vcs_event_c<void> k_evEcoModeDisabled;
 
+static std::vector<std::function<void()>> SUBSYSTEM_RELEASERS;
+
 // Set to true when we want to break out of the program's main loop and terminate.
 /// TODO. Don't have this global.
 bool PROGRAM_EXIT_REQUESTED = false;
@@ -43,13 +45,10 @@ static void cleanup_all(void)
 {
     INFO(("Received orders to exit. Initiating cleanup."));
 
-    kt_release_timers();
-    kd_release_output_window();
-    ks_release_scaler();
-    kc_release_capture();
-    kat_release_anti_tear();
-    kf_release_filters();
-    kvideopreset_release();
+    for (const auto &subsystemReleaser: SUBSYSTEM_RELEASERS)
+    {
+        subsystemReleaser();
+    }
 
     INFO(("Ready to exit."));
     return;
@@ -96,19 +95,14 @@ static bool initialize_all(void)
         }
     });
 
-    if (!PROGRAM_EXIT_REQUESTED) kt_initialize_timers();
-    if (!PROGRAM_EXIT_REQUESTED) ka_initialize_aliases();
-    if (!PROGRAM_EXIT_REQUESTED) kvideopreset_initialize();
-    if (!PROGRAM_EXIT_REQUESTED) ks_initialize_scaler();
-    if (!PROGRAM_EXIT_REQUESTED) kc_initialize_capture();
-    if (!PROGRAM_EXIT_REQUESTED) kat_initialize_anti_tear();
-    if (!PROGRAM_EXIT_REQUESTED) kf_initialize_filters();
+    kvideopreset_initialize();
+    ks_initialize_scaler();
+    kc_initialize_capture();
+    kat_initialize_anti_tear();
+    kf_initialize_filters();
 
-    // Ideally, do these last.
-    if (!PROGRAM_EXIT_REQUESTED)
-    {
-        kd_acquire_output_window();
-    }
+    // Initialize this last.
+    kd_acquire_output_window();
 
     return !PROGRAM_EXIT_REQUESTED;
 }
@@ -196,6 +190,13 @@ static void load_user_data(void)
     kd_load_video_presets(kcom_video_presets_file_name());
     kd_load_filter_graph(kcom_filter_graph_file_name());
     kd_load_aliases(kcom_aliases_file_name());
+
+    return;
+}
+
+void k_register_subsystem_releaser(subsystem_releaser_t releaser)
+{
+    SUBSYSTEM_RELEASERS.push_back(releaser);
 
     return;
 }

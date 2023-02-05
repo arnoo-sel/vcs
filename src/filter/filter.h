@@ -41,7 +41,8 @@
  * ## Usage
  *
  *   1. Call kf_initialize_filters() to initialize the filter subsystem. This is
- *      VCS's default startup behavior.
+ *      VCS's default startup behavior. Note that this function should only be
+ *      called once per program execution.
  *
  *   2. Use kf_create_filter_instance() to create instances of filters:
  *      @code
@@ -115,8 +116,7 @@
  *      kf_delete_filter_instance(blur);
  *      @endcode
  * 
- *   7. Call kf_release_filters() to release the filter subsystem. This is VCS's
- *      default exit behavior.
+ *   7. VCS will automatically release the subsystem on program termination.
  * 
  * @warning
  * Once established, you should never change a filter's UUID. It acts as a filter
@@ -333,7 +333,7 @@ abstract_filter_c* kf_create_filter_instance(const filter_params_t &initialParam
  * The caller must first unregister any filter chains that're using this filter.
  *
  * @see
- * kf_release_filters(), kf_unregister_all_filter_chains()
+ * kf_unregister_all_filter_chains()
  */
 void kf_delete_filter_instance(const abstract_filter_c *const filter);
 

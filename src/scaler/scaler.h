@@ -182,18 +182,6 @@ bool ks_is_custom_scaler_active(void);
 void ks_initialize_scaler(void);
 
 /*!
- * Releases the scaler subsystem, deallocating any of its memory buffers etc.
- * 
- * @warning
- * Between calling this function and ks_initialize_scaler(), no other scaler
- * subsystem functions should be called.
- * 
- * @see
- * ks_initialize_scaler()
- */
-void ks_release_scaler(void);
-
-/*!
  * Applies scaling to the given frame's pixels and stores the result in the scaler
  * subsystem's frame buffer. The input data are not modified.
  * 

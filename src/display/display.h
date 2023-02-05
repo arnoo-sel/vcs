@@ -160,21 +160,9 @@ struct filter_graph_option_s
  * It's expected that VCS will only call this function once, at program launch.
  *
  * @see
- * kd_release_output_window(), kd_spin_event_loop()
+ * kd_spin_event_loop()
  */
 void kd_acquire_output_window(void);
-
-/*!
- * Asks the GUI to close and destroy the output window; as well as any child
- * windows and/or dialogs.
- *
- * It's expected that VCS will only call this function once, when the program
- * is about to exit.
- *
- * @see
- * kd_acquire_output_window()
- */
-void kd_release_output_window(void);
 
 // Visit each node in the graph and while doing so, group together such chains of
 // filters that run from an input gate through one or more filters into an output

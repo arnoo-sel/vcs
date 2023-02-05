@@ -15,6 +15,7 @@
 #include "capture/capture.h"
 #include "common/globals.h"
 #include "common/disk/csv.h"
+#include "main.h"
 
 // The color depth we expect frames to be when they're fed into the anti-tear engine.
 static const u32 EXPECTED_BIT_DEPTH = 32;
@@ -33,20 +34,15 @@ image_s kat_anti_tear(const image_s &image)
 
 void kat_initialize_anti_tear(void)
 {
+    DEBUG(("Initializing the anti-tear subsystem"));
+
     const resolution_s &maxres = {MAX_CAPTURE_WIDTH, MAX_CAPTURE_HEIGHT, MAX_CAPTURE_BPP};
-
-    DEBUG(("Initializing the anti-tear subsystem for %u x %u max.", maxres.w, maxres.h));
-
     ANTI_TEARER.initialize(maxres);
 
-    return;
-}
-
-void kat_release_anti_tear(void)
-{
-    DEBUG(("Releasing the anti-tear engine."));
-
-    ANTI_TEARER.release();
+    k_register_subsystem_releaser([]{
+        DEBUG(("Releasing the anti-tear subsystem."));
+        ANTI_TEARER.release();
+    });
 
     return;
 }

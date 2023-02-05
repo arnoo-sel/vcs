@@ -22,6 +22,7 @@
 #include "filter/filter.h"
 #include "capture/alias.h"
 #include "common/log/log.h"
+#include "main.h"
 
 // We'll want to avoid accessing the GUI via non-GUI threads, so let's assume
 // the thread that creates this unit is the GUI thread. We'll later compare
@@ -60,24 +61,13 @@ void kd_acquire_output_window(void)
     WINDOW = new MainWindow;
     WINDOW->show();
 
-    return;
-}
-
-void kd_release_output_window(void)
-{
-    DEBUG(("Releasing the display."));
-
-    if (!WINDOW)
-    {
-        DEBUG(("Expected the display to have been acquired before releasing it. Ignoring this call."));
-    }
-    else
-    {
-        delete WINDOW;
-        WINDOW = nullptr;
-
-        delete app_n::APP;
-    }
+    k_register_subsystem_releaser([]{
+        DEBUG(("Releasing the display."));
+        if (WINDOW)
+        {
+            delete WINDOW;
+        }
+    });
 
     return;
 }

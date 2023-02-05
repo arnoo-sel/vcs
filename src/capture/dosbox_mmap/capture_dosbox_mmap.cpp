@@ -188,6 +188,7 @@ static int capture_thread(void)
 bool kc_initialize_device(void)
 {
     DEBUG(("Initializing the virtual capture device."));
+    k_assert(!FRAME_BUFFER.pixels, "Attempting to doubly initialize the capture device.");
 
     FRAME_BUFFER.r = {640, 480, 32};
     FRAME_BUFFER.pixelFormat = capture_pixel_format_e::rgb_888;
@@ -229,7 +230,7 @@ bool kc_initialize_device(void)
 bool kc_release_device(void)
 {
     delete [] FRAME_BUFFER.pixels;
-
+    
     RUN_CAPTURE_THREAD = false;
     CAPTURE_THREAD_FUTURE.wait();
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 2018 Tarpeeksi Hyvae Soft /
  * VCS filter
  *
@@ -18,6 +18,7 @@
 #include "filter/filter.h"
 #include "filter/abstract_filter.h"
 #include "filter/filters/filters.h"
+#include "main.h"
 
 // Whether filters (if any are activated) should be applied to incoming frames.
 static bool FILTERING_ENABLED = false;
@@ -41,6 +42,7 @@ static int MOST_RECENT_FILTER_CHAIN_IDX = -1;
 void kf_initialize_filters(void)
 {
     DEBUG(("Initializing the filter subsystem."));
+    k_assert(!KNOWN_FILTER_TYPES.size(), "Attempting to doubly initialize the filter subsystem.");
 
     KNOWN_FILTER_TYPES = {
         new filter_blur_c(),
@@ -68,10 +70,26 @@ void kf_initialize_filters(void)
     {
         for (unsigned c = (i + 1); c < KNOWN_FILTER_TYPES.size(); c++)
         {
-            k_assert((KNOWN_FILTER_TYPES.at(i)->uuid() != KNOWN_FILTER_TYPES.at(c)->uuid()),
-                     "Duplicate filter UUIDs detected.");
+            k_assert(
+                (KNOWN_FILTER_TYPES.at(i)->uuid() != KNOWN_FILTER_TYPES.at(c)->uuid()),
+                "Duplicate filter UUIDs detected."
+            );
         }
     }
+
+    k_register_subsystem_releaser([]{
+        DEBUG(("Releasing the filter subsystem."));
+
+        for (auto *filter: FILTER_POOL)
+        {
+            delete filter;
+        }
+
+        for (const auto *filter: KNOWN_FILTER_TYPES)
+        {
+            delete filter;
+        }
+    });
 
     return;
 }
@@ -258,25 +276,6 @@ bool kf_is_known_filter_uuid(const std::string &filterTypeUuid)
     }
 
     return false;
-}
-
-void kf_release_filters(void)
-{
-    DEBUG(("Releasing custom filtering."));
-
-    MOST_RECENT_FILTER_CHAIN_IDX = -1;
-
-    for (auto *filter: FILTER_POOL)
-    {
-        delete filter;
-    }
-
-    for (const auto *filter: KNOWN_FILTER_TYPES)
-    {
-        delete filter;
-    }
-
-    return;
 }
 
 void kf_set_filtering_enabled(const bool enabled)

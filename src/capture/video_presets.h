@@ -129,8 +129,6 @@ bool kvideopreset_is_preset_active(const video_preset_s *const preset);
 
 void kvideopreset_initialize(void);
 
-void kvideopreset_release(void);
-
 void kvideopreset_remove_all_presets(void);
 
 void kvideopreset_assign_presets(const std::vector<video_preset_s*> &presets);

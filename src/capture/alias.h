@@ -53,6 +53,4 @@ const std::vector<resolution_alias_s>& ka_aliases(void);
 // Assign the list of aliases we'll operate on.
 void ka_set_aliases(const std::vector<resolution_alias_s> &aliases);
 
-void ka_initialize_aliases(void);
-
 #endif

@@ -119,6 +119,7 @@ static bool pop_capture_event(const capture_event_e event)
 bool kc_initialize_device(void)
 {
     DEBUG(("Initializing the virtual capture device."));
+    k_assert(!FRAME_BUFFER.pixels, "Attempting to doubly initialize the capture device.");
 
     FRAME_BUFFER.r = {640, 480, 32};
     FRAME_BUFFER.pixelFormat = capture_pixel_format_e::rgb_888;
@@ -161,7 +162,7 @@ bool kc_initialize_device(void)
 bool kc_release_device(void)
 {
     delete [] FRAME_BUFFER.pixels;
-
+    
     return true;
 }
 

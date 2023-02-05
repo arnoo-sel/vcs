@@ -14,11 +14,6 @@
 // A list of all the aliases we know of.
 static std::vector<resolution_alias_s> ALIASES;
 
-void ka_initialize_aliases(void)
-{
-    return;
-}
-
 // Returns the index in the list of known aliases the alias whose source
 // resolution matches the given resolution; or -1 is no such alias is
 // found.

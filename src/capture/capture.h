@@ -30,13 +30,13 @@
  * ## Usage
  *
  *   1. Call kc_initialize_capture() to initialize the subsystem. This is VCS's
- *      default startup behavior.
+ *      default startup behavior. Note that the function should be called only
+ *      once per program execution.
  *
  *   2. Use the interface functions to interact with the subsystem. For instance,
  *      kc_get_frame_buffer() returns the most recent captured frame's data.
  *
- *   3. Call kc_release_capture() to release the subsystem. This is VCS's default
- *      exit behavior.
+ *   3. VCS will automatically release the subsystem on program termination.
  * 
  * ## Implementing support for new capture devices
  * 
@@ -476,7 +476,7 @@ std::mutex& kc_capture_mutex(void);
  * @endcode
  *
  * @see
- * kc_release_capture(), kc_evNewCapturedFrame
+ * kc_evNewCapturedFrame
  */
 void kc_initialize_capture(void);
 
@@ -495,27 +495,13 @@ void kc_initialize_capture(void);
 bool kc_initialize_device(void);
 
 /*!
- * Releases the capture subsystem.
- *
- * By default, VCS will call this function on program exit.
- *
- * @see
- * kc_initialize_capture()
- */
-void kc_release_capture(void);
-
-/*!
  * Releases the capture device.
- *
- * By default, this function will be called by kc_release_capture(), which
- * you should call if you want to release the capture device.
  *
  * Returns true on success; false otherwise.
  *
  * @warning
- * Don't call this function directly. Instead, call kc_release_capture(), which
- * will release both the capture device and the capture subsystem (they are
- * interlinked).
+ * Don't call this function directly. The capture subsystem will call it as
+ * necessary.
  *
  * @see
  * kc_initialize_capture(), kc_initialize_device()

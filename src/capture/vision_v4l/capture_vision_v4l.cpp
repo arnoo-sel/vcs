@@ -214,6 +214,7 @@ capture_pixel_format_e kc_get_capture_pixel_format(void)
 bool kc_initialize_device(void)
 {
     DEBUG(("Initializing the Vision/V4L capture device."));
+    k_assert(!FRAME_BUFFER.pixels, "Attempting to doubly initialize the capture device.");
 
     kc_evSignalGained.listen([]
     {

@@ -133,22 +133,6 @@ enum class anti_tear_scan_direction_e
 void kat_initialize_anti_tear(void);
 
 /*!
- * Releases the anti-tear subsystem, including all of its memory buffers.
- * 
- * By default, VCS will call this function on program exit.
- * 
- * Returns true on success; false otherwise.
- * 
- * @warning
- * Calling this function -- regardless of its return value -- invalidates the
- * pointer returned by kat_anti_tear().
- * 
- * @see
- * kat_initialize_anti_tear()
- */
-void kat_release_anti_tear(void);
-
-/*!
  * Submits an image into the anti-tearing process. The parts of the image that are
  * found by the anti-tearer to be new relative to the previous submitted image(s)
  * will be integrated into the anti-tearer's back buffer.
