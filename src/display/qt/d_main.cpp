@@ -22,7 +22,6 @@
 #include "filter/filter.h"
 #include "capture/alias.h"
 #include "common/log/log.h"
-#include "main.h"
 
 // We'll want to avoid accessing the GUI via non-GUI threads, so let's assume
 // the thread that creates this unit is the GUI thread. We'll later compare
@@ -51,7 +50,7 @@ void kd_recalculate_filter_graph_chains(void)
     return;
 }
 
-void kd_acquire_output_window(void)
+subsystem_releaser_t kd_acquire_output_window(void)
 {
     DEBUG(("Acquiring the display."));
 
@@ -61,15 +60,13 @@ void kd_acquire_output_window(void)
     WINDOW = new MainWindow;
     WINDOW->show();
 
-    k_register_subsystem_releaser([]{
+    return []{
         DEBUG(("Releasing the display."));
         if (WINDOW)
         {
             delete WINDOW;
         }
-    });
-
-    return;
+    };
 }
 
 void kd_spin_event_loop(void)

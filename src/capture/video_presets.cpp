@@ -10,7 +10,6 @@
 #include "common/propagate/vcs_event.h"
 #include "capture/video_presets.h"
 #include "capture/capture.h"
-#include "main.h"
 
 vcs_event_c<const video_preset_s*> kc_evVideoPresetParamsChanged;
 
@@ -58,7 +57,7 @@ static video_preset_s* strongest_activating_preset(void)
     }
 }
 
-void kvideopreset_initialize(void)
+subsystem_releaser_t kvideopreset_initialize(void)
 {
     DEBUG(("Initializing the video presets subsystem."));
 
@@ -77,7 +76,7 @@ void kvideopreset_initialize(void)
         });
     }
 
-    return;
+    return []{};
 }
 
 bool kvideopreset_is_preset_active(const video_preset_s *const preset)

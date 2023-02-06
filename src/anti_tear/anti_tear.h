@@ -53,6 +53,7 @@
 #define VCS_FILTER_ANTI_TEAR_H
 
 #include "common/globals.h"
+#include "main.h"
 
 struct resolution_s;
 struct image_s;
@@ -123,6 +124,8 @@ enum class anti_tear_scan_direction_e
  * Initializes the anti-tear subsystem.
  * 
  * By default, VCS will call this function on program startup.
+ *
+ * Returns a function that releases the anti-tear subsystem.
  * 
  * @note
  * Will trigger an assertion failure if the initialization fails.
@@ -130,7 +133,7 @@ enum class anti_tear_scan_direction_e
  * @see
  * kat_release_anti_tear()
  */
-void kat_initialize_anti_tear(void);
+subsystem_releaser_t kat_initialize_anti_tear(void);
 
 /*!
  * Submits an image into the anti-tearing process. The parts of the image that are

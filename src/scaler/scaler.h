@@ -21,7 +21,8 @@
  * ## Usage
  * 
  *   1. Call ks_initialize_scaler() to initialize the subsystem. This is VCS's
- *      default startup behavior.
+ *      default startup behavior. Note that this function should be called only
+ *      once per program execution.
  * 
  *   2. Use setter functions to customize scaler options:
  *      @code
@@ -52,8 +53,7 @@
  *      });
  *      @endcode
  *
- *   5. Call ks_release_scaler() to release the subsystem. This is VCS's default
- *      exit behavior.
+ *   5. VCS will automatically release the scaler subsystem on program exit.
  * 
  */
 
@@ -63,6 +63,7 @@
 #include "common/globals.h"
 #include "common/propagate/vcs_event.h"
 #include "filter/filters/render_text/font_5x3.h"
+#include "main.h"
 
 class abstract_filter_c;
 struct captured_frame_s;
@@ -172,14 +173,15 @@ bool ks_is_custom_scaler_active(void);
 
 /*!
  * Initializes the scaler subsystem.
+ *
+ * By default, VCS will call this function automatically on program startup.
+ *
+ * Returns a function that releases the scaler subsystem.
  * 
  * @note
  * This function should be called before any other functions of the scaler interface.
- * 
- * @see
- * ks_release_scaler()
  */
-void ks_initialize_scaler(void);
+subsystem_releaser_t ks_initialize_scaler(void);
 
 /*!
  * Applies scaling to the given frame's pixels and stores the result in the scaler

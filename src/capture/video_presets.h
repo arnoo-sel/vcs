@@ -13,6 +13,7 @@
 #include "common/refresh_rate.h"
 #include "capture/capture.h"
 #include "common/propagate/vcs_event.h"
+#include "main.h"
 
 struct video_preset_s
 {
@@ -127,7 +128,7 @@ extern vcs_event_c<const video_preset_s*> kc_evVideoPresetParamsChanged;
 
 bool kvideopreset_is_preset_active(const video_preset_s *const preset);
 
-void kvideopreset_initialize(void);
+subsystem_releaser_t kvideopreset_initialize(void);
 
 void kvideopreset_remove_all_presets(void);
 

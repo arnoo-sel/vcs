@@ -80,6 +80,7 @@
 #include "common/refresh_rate.h"
 #include "common/types.h"
 #include "common/propagate/vcs_event.h"
+#include "main.h"
 
 struct video_mode_s;
 
@@ -460,7 +461,9 @@ std::mutex& kc_capture_mutex(void);
 /*!
  * Initializes the capture subsystem.
  *
- * By default, VCS will call this function on program startup.
+ * By default, VCS will call this function automatically on program startup.
+ *
+ * Returns a function that releases the capture subsystem.
  * 
  * @note
  * Will trigger an assertion failure if the initialization fails.
@@ -478,7 +481,7 @@ std::mutex& kc_capture_mutex(void);
  * @see
  * kc_evNewCapturedFrame
  */
-void kc_initialize_capture(void);
+subsystem_releaser_t kc_initialize_capture(void);
 
 /*!
  * Initializes the capture device.

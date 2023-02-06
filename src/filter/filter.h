@@ -133,6 +133,7 @@
 #include <functional>
 #include <cstring>
 #include "filter/filtergui.h"
+#include "main.h"
 
 class abstract_filter_c;
 struct resolution_s;
@@ -190,25 +191,15 @@ enum class filter_category_e
 
 /*!
  * Initializes the filter subsystem, allocating its memory buffers etc.
+ *
+ * By default, VCS will call this function automatically on program startup.
+ *
+ * Returns a function that releases the filter subsystem.
  * 
  * @warning
  * This function must be called prior to any others in the filter subsystem.
- * 
- * @see
- * kf_release_filters()
  */
-void kf_initialize_filters(void);
-
-/*!
- * Releases the filter subsystem, including deallocating any of its memory
- * buffers and filter instances.
- * 
- * @warning
- * Between calling this function and kf_initialize_filters(), no other filter
- * subsystem function should be called. The pointers to any filter instances
- * created with kf_create_filter_instance() will be invalidated by this call.
- */
-void kf_release_filters(void);
+subsystem_releaser_t kf_initialize_filters(void);
 
 /*!
  * Adds @p newChain to the filter subsystem's list of known filter chains.

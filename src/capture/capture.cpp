@@ -10,7 +10,6 @@
 #include "common/propagate/vcs_event.h"
 #include "capture/capture.h"
 #include "common/timer/timer.h"
-#include "main.h"
 
 vcs_event_c<const captured_frame_s&> kc_evNewCapturedFrame;
 vcs_event_c<const video_mode_s&> kc_evNewProposedVideoMode;
@@ -41,7 +40,7 @@ const capture_state_s& kc_current_capture_state(void)
     return CAPTURE_STATUS;
 }
 
-void kc_initialize_capture(void)
+subsystem_releaser_t kc_initialize_capture(void)
 {
     DEBUG(("Initializing the capture subsystem."));
 
@@ -89,12 +88,10 @@ void kc_initialize_capture(void)
         CAPTURE_STATUS.hardwareChannelIdx = kc_get_device_input_channel_idx();
     });
 
-    k_register_subsystem_releaser([]{
+    return []{
         DEBUG(("Releasing the capture subsystem."));
         kc_release_device();
-    });
-
-    return;
+    };
 }
 
 bool kc_force_capture_resolution(const resolution_s &r)

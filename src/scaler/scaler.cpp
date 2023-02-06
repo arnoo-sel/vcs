@@ -21,7 +21,6 @@
 #include "filter/filters/output_scaler/filter_output_scaler.h"
 #include "scaler/scaler.h"
 #include "common/timer/timer.h"
-#include "main.h"
 
 vcs_event_c<const resolution_s&> ks_evNewOutputResolution;
 vcs_event_c<const image_s&> ks_evNewScaledImage;
@@ -144,7 +143,7 @@ bool ks_is_custom_scaler_active(void)
     return IS_CUSTOM_SCALER_ACTIVE;
 }
 
-void ks_initialize_scaler(void)
+subsystem_releaser_t ks_initialize_scaler(void)
 {
     DEBUG(("Initializing the scaler subsystem."));
     k_assert(!FRAME_BUFFER_PIXELS, "Attempting to doubly initialize the scaler subsystem.");
@@ -185,7 +184,7 @@ void ks_initialize_scaler(void)
         NUM_FRAMES_SCALED_PER_SECOND = 0;
     });
 
-    return;
+    return []{};
 }
 
 static image_s frame_as_bgra_image(const captured_frame_s &frame)

@@ -37,7 +37,7 @@
 vcs_event_c<void> k_evEcoModeEnabled;
 vcs_event_c<void> k_evEcoModeDisabled;
 
-static std::deque<std::function<void()>> SUBSYSTEM_RELEASERS;
+static std::deque<subsystem_releaser_t> SUBSYSTEM_RELEASERS;
 
 // Set to true when we want to break out of the program's main loop and terminate.
 /// TODO. Don't have this be global. Instead provide a function to request state changes on it.
@@ -109,14 +109,14 @@ static bool initialize_all(void)
         }
     });
 
-    kvideopreset_initialize();
-    ks_initialize_scaler();
-    kc_initialize_capture();
-    kat_initialize_anti_tear();
-    kf_initialize_filters();
+    SUBSYSTEM_RELEASERS.push_back(kvideopreset_initialize());
+    SUBSYSTEM_RELEASERS.push_back(ks_initialize_scaler());
+    SUBSYSTEM_RELEASERS.push_back(kc_initialize_capture());
+    SUBSYSTEM_RELEASERS.push_back(kat_initialize_anti_tear());
+    SUBSYSTEM_RELEASERS.push_back(kf_initialize_filters());
 
     // Initialize this last.
-    kd_acquire_output_window();
+    SUBSYSTEM_RELEASERS.push_back(kd_acquire_output_window());
 
     return !PROGRAM_EXIT_REQUESTED;
 }
@@ -204,13 +204,6 @@ static void load_user_data(void)
     kd_load_video_presets(kcom_video_presets_file_name());
     kd_load_filter_graph(kcom_filter_graph_file_name());
     kd_load_aliases(kcom_aliases_file_name());
-
-    return;
-}
-
-void k_register_subsystem_releaser(subsystem_releaser_t releaser)
-{
-    SUBSYSTEM_RELEASERS.push_back(releaser);
 
     return;
 }

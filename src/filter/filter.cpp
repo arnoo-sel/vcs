@@ -18,7 +18,6 @@
 #include "filter/filter.h"
 #include "filter/abstract_filter.h"
 #include "filter/filters/filters.h"
-#include "main.h"
 
 // Whether filters (if any are activated) should be applied to incoming frames.
 static bool FILTERING_ENABLED = false;
@@ -39,7 +38,7 @@ static std::vector<std::vector<abstract_filter_c*>> FILTER_CHAINS;
 // resolution.
 static int MOST_RECENT_FILTER_CHAIN_IDX = -1;
 
-void kf_initialize_filters(void)
+subsystem_releaser_t kf_initialize_filters(void)
 {
     DEBUG(("Initializing the filter subsystem."));
     k_assert(!KNOWN_FILTER_TYPES.size(), "Attempting to doubly initialize the filter subsystem.");
@@ -77,7 +76,7 @@ void kf_initialize_filters(void)
         }
     }
 
-    return;
+    return []{};
 }
 
 abstract_filter_c* kf_apply_matching_filter_chain(image_s *const dstImage)

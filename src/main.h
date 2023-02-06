@@ -21,6 +21,4 @@ void k_set_eco_mode_enabled(const bool isEnabled);
 
 bool k_is_eco_mode_enabled(void);
 
-void k_register_subsystem_releaser(subsystem_releaser_t releaser);
-
 #endif

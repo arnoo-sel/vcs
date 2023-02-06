@@ -36,6 +36,7 @@
 #include "common/types.h"
 #include "common/propagate/vcs_event.h"
 #include "filter/filter.h"
+#include "main.h"
 
 struct log_entry_s;
 struct resolution_alias_s;
@@ -157,12 +158,14 @@ struct filter_graph_option_s
  * If the GUI makes use of child windows and/or dialogs, this may be a good
  * time to create them, as well.
  *
- * It's expected that VCS will only call this function once, at program launch.
+ * By default, VCS will call this function automatically on program startup.
+ *
+ * Returns a function that closes and releases the output window.
  *
  * @see
  * kd_spin_event_loop()
  */
-void kd_acquire_output_window(void);
+subsystem_releaser_t kd_acquire_output_window(void);
 
 // Visit each node in the graph and while doing so, group together such chains of
 // filters that run from an input gate through one or more filters into an output
