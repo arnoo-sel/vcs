@@ -15,6 +15,7 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
+#include <deque>
 #include "display/qt/windows/output_window.h"
 #include "common/command_line/command_line.h"
 #include "anti_tear/anti_tear.h"
@@ -32,7 +33,7 @@
 vcs_event_c<void> k_evEcoModeEnabled;
 vcs_event_c<void> k_evEcoModeDisabled;
 
-static std::vector<std::function<void()>> SUBSYSTEM_RELEASERS;
+static std::deque<std::function<void()>> SUBSYSTEM_RELEASERS;
 
 // Set to true when we want to break out of the program's main loop and terminate.
 /// TODO. Don't have this global.
@@ -41,16 +42,17 @@ bool PROGRAM_EXIT_REQUESTED = false;
 static bool IS_ECO_MODE_ENABLED = false;
 static auto ECO_REFERENCE_TIME = std::chrono::system_clock::now();
 
-static void cleanup_all(void)
+static void release_all(void)
 {
-    INFO(("Received orders to exit. Initiating cleanup."));
-
-    for (const auto &subsystemReleaser: SUBSYSTEM_RELEASERS)
+    INFO(("Releasing subsystems."));
+    while (!SUBSYSTEM_RELEASERS.empty())
     {
-        subsystemReleaser();
+        auto releaser_fn = SUBSYSTEM_RELEASERS.back();
+        SUBSYSTEM_RELEASERS.pop_back();
+        releaser_fn();
     }
+    INFO(("Subsystems released."));
 
-    INFO(("Ready to exit."));
     return;
 }
 
@@ -290,9 +292,9 @@ int main(int argc, char *argv[])
     // performance until the computer is rebooted.)
     std::set_terminate([]
     {
-        NBENE(("VCS has encountered a run-time error and has decided that it's best to close down."));
+        NBENE(("VCS has encountered a run-time error and will attempt to exit."));
         PROGRAM_EXIT_REQUESTED = true;
-        cleanup_all();
+        release_all();
     });
 
     DEBUG(("Parsing the command line."));
@@ -314,7 +316,7 @@ int main(int argc, char *argv[])
            "open, run VCS again from the command line."
         );
 
-        cleanup_all();
+        release_all();
         return EXIT_FAILURE;
     }
     else
@@ -336,6 +338,6 @@ int main(int argc, char *argv[])
         eco_sleep(e);
     }
 
-    cleanup_all();
+    release_all();
     return EXIT_SUCCESS;
 }

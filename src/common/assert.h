@@ -8,6 +8,7 @@
 #ifndef VCS_COMMON_ASSERT_H
 #define VCS_COMMON_ASSERT_H
 
+#include "globals.h"
 #include "display/display.h"
 #include "common/log/log.h"
 
@@ -20,9 +21,17 @@
 #define k_assert(condition, error_string) \
     if (!(condition))\
     {\
-        klog_log_assert("Assertion failure in %s:%d: \"%s\"", __FILE__, __LINE__, error_string);\
-        kd_show_headless_assert_error_message(error_string, __FILE__, __LINE__);\
-        throw std::runtime_error(error_string);\
+        klog_log_assert("%s:%d \"%s\"", __FILE__, __LINE__, error_string);\
+        if (!PROGRAM_EXIT_REQUESTED)\
+        {\
+            kd_show_headless_assert_error_message(error_string, __FILE__, __LINE__);\
+            throw std::runtime_error(error_string);\
+        }\
+        else\
+        {\
+            NBENE(("VCS has crashed while attempting to exit."));\
+            std::abort();\
+        }\
     }
 
 // Assertions in e.g. performance-critical code.
