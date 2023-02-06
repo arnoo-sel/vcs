@@ -147,6 +147,7 @@ bool ks_is_custom_scaler_active(void)
 void ks_initialize_scaler(void)
 {
     DEBUG(("Initializing the scaler subsystem."));
+    k_assert(!FRAME_BUFFER_PIXELS, "Attempting to doubly initialize the scaler subsystem.");
 
     cv::redirectError(cv_error_handler);
 
@@ -182,11 +183,6 @@ void ks_initialize_scaler(void)
         ks_evFramesPerSecond.fire(NUM_FRAMES_SCALED_PER_SECOND);
 
         NUM_FRAMES_SCALED_PER_SECOND = 0;
-    });
-
-    k_register_subsystem_releaser([]{
-        DEBUG(("Releasing the scaler subsystem."));
-        delete [] FRAME_BUFFER_PIXELS;
     });
 
     return;

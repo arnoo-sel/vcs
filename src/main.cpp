@@ -30,28 +30,40 @@
 #include "common/timer/timer.h"
 #include "main.h"
 
+#ifdef __SANITIZE_ADDRESS__
+    #include <sanitizer/lsan_interface.h>
+#endif
+
 vcs_event_c<void> k_evEcoModeEnabled;
 vcs_event_c<void> k_evEcoModeDisabled;
 
 static std::deque<std::function<void()>> SUBSYSTEM_RELEASERS;
 
 // Set to true when we want to break out of the program's main loop and terminate.
-/// TODO. Don't have this global.
+/// TODO. Don't have this be global. Instead provide a function to request state changes on it.
 bool PROGRAM_EXIT_REQUESTED = false;
 
 static bool IS_ECO_MODE_ENABLED = false;
 static auto ECO_REFERENCE_TIME = std::chrono::system_clock::now();
 
-static void release_all(void)
+static void prepare_for_exit(void)
 {
-    INFO(("Releasing subsystems."));
+    INFO(("Received orders to exit. Initiating cleanup."));
+
     while (!SUBSYSTEM_RELEASERS.empty())
     {
         auto releaser_fn = SUBSYSTEM_RELEASERS.back();
         SUBSYSTEM_RELEASERS.pop_back();
         releaser_fn();
     }
-    INFO(("Subsystems released."));
+
+    INFO(("Ready to exit."));
+
+    // Force the memory leak check to run now rather than on program exit, so that
+    // it ignores allocations that remain on exit and which we let the OS clean up.
+    #ifdef __SANITIZE_ADDRESS__
+      __lsan_do_leak_check();
+    #endif
 
     return;
 }
@@ -294,14 +306,15 @@ int main(int argc, char *argv[])
     {
         NBENE(("VCS has encountered a run-time error and will attempt to exit."));
         PROGRAM_EXIT_REQUESTED = true;
-        release_all();
+        prepare_for_exit();
     });
 
     DEBUG(("Parsing the command line."));
     if (!kcom_parse_command_line(argc, argv))
     {
-        NBENE(("Command line parse failed. Exiting."));
-        return 1;
+        NBENE(("Malformed command line argument(s). Exiting."));
+        prepare_for_exit();
+        return EXIT_FAILURE;
     }
 
     INFO(("Initializing VCS."));
@@ -316,7 +329,7 @@ int main(int argc, char *argv[])
            "open, run VCS again from the command line."
         );
 
-        release_all();
+        prepare_for_exit();
         return EXIT_FAILURE;
     }
     else
@@ -338,6 +351,6 @@ int main(int argc, char *argv[])
         eco_sleep(e);
     }
 
-    release_all();
+    prepare_for_exit();
     return EXIT_SUCCESS;
 }

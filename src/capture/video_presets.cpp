@@ -77,11 +77,6 @@ void kvideopreset_initialize(void)
         });
     }
 
-    k_register_subsystem_releaser([]{
-        DEBUG(("Releasing the video presets subsystem."));
-        kvideopreset_remove_all_presets();
-    });
-
     return;
 }
 

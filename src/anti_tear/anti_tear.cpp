@@ -39,11 +39,6 @@ void kat_initialize_anti_tear(void)
     const resolution_s &maxres = {MAX_CAPTURE_WIDTH, MAX_CAPTURE_HEIGHT, MAX_CAPTURE_BPP};
     ANTI_TEARER.initialize(maxres);
 
-    k_register_subsystem_releaser([]{
-        DEBUG(("Releasing the anti-tear subsystem."));
-        ANTI_TEARER.release();
-    });
-
     return;
 }
 

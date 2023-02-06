@@ -77,20 +77,6 @@ void kf_initialize_filters(void)
         }
     }
 
-    k_register_subsystem_releaser([]{
-        DEBUG(("Releasing the filter subsystem."));
-
-        for (auto *filter: FILTER_POOL)
-        {
-            delete filter;
-        }
-
-        for (const auto *filter: KNOWN_FILTER_TYPES)
-        {
-            delete filter;
-        }
-    });
-
     return;
 }
 
