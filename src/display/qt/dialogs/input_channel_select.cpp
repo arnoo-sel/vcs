@@ -7,8 +7,8 @@
 
 #include "common/globals.h"
 #include "common/assert.h"
-#include "display/qt/dialogs/linux_device_selector_dialog.h"
-#include "ui_linux_device_selector_dialog.h"
+#include "display/qt/dialogs/input_channel_select.h"
+#include "ui_input_channel_select.h"
 
 LinuxDeviceSelectorDialog::LinuxDeviceSelectorDialog(unsigned *const deviceIdx, QWidget *parent) :
     QDialog(parent),
@@ -17,7 +17,7 @@ LinuxDeviceSelectorDialog::LinuxDeviceSelectorDialog(unsigned *const deviceIdx, 
 {
     ui->setupUi(this);
 
-    this->setWindowTitle(QString("Select an input channel - %2").arg(PROGRAM_NAME));
+    this->setWindowTitle(QString("Input channel - %2").arg(PROGRAM_NAME));
 
     ui->spinBox_deviceIdx->setValue(*deviceIdx);
     ui->spinBox_deviceIdx->setFocus();
