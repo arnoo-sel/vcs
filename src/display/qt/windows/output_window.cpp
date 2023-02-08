@@ -59,8 +59,6 @@
 // For an optional OpenGL render surface.
 static OGLWidget *OGL_SURFACE = nullptr;
 
-static unsigned CURRENT_OUTPUT_FPS = 0;
-
 static bool IS_FRAME_DROP_INDICATOR_ENABLED = true;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -704,15 +702,6 @@ MainWindow::MainWindow(QWidget *parent) :
             this->redraw();
         });
 
-        ks_evFramesPerSecond.listen([this](const unsigned fps)
-        {
-            if (CURRENT_OUTPUT_FPS != fps)
-            {
-                CURRENT_OUTPUT_FPS = fps;
-                this->update_window_title();
-            }
-        });
-
         k_evEcoModeEnabled.listen([this]
         {
             this->update_window_title();
@@ -1126,16 +1115,15 @@ void MainWindow::update_window_title(void)
         }
         else
         {
-            title = QString("%1%2 - %3%4 \u00d7 %5 (%6 Hz) shown in %7 \u00d7 %8 (%9 FPS)")
-                    .arg(missedFramesMarker)
-                    .arg(programName)
-                    .arg(programStatus.count()? QString("%1 - ").arg(programStatus.join("")) : "")
-                    .arg(inRes.w)
-                    .arg(inRes.h)
-                    .arg(QString::number(refreshRate.value<double>(), 'f', 3))
-                    .arg(outRes.w)
-                    .arg(outRes.h)
-                    .arg(CURRENT_OUTPUT_FPS);
+            title = QString("%1%2 - %3%4 \u00d7 %5 (%6 Hz) shown in %7 \u00d7 %8")
+                .arg(missedFramesMarker)
+                .arg(programName)
+                .arg(programStatus.count()? QString("%1 - ").arg(programStatus.join("")) : "")
+                .arg(inRes.w)
+                .arg(inRes.h)
+                .arg(QString::number(refreshRate.value<double>(), 'f', 3))
+                .arg(outRes.w)
+                .arg(outRes.h);
         }
     }
 
