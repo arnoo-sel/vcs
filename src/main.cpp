@@ -70,53 +70,64 @@ static void prepare_for_exit(void)
 
 static bool initialize_all(void)
 {
-    k_evEcoModeEnabled.listen([]
+    // Listen for app events.
     {
-        ECO_REFERENCE_TIME = std::chrono::system_clock::now();
-    });
-
-    kc_evUnrecoverableError.listen([]
-    {
-        PROGRAM_EXIT_REQUESTED = true;
-    });
-
-    kc_evNewVideoMode.listen([](const video_mode_s &videoMode)
-    {
-        INFO((
-            "Video mode: %u x %u at %.3f Hz.",
-            videoMode.resolution.w,
-            videoMode.resolution.h,
-            videoMode.refreshRate.value<double>()
-        ));
-    });
-
-    // The capture device has received a new video mode. We'll inspect the
-    // mode to see if we think it's acceptable, then allow news of it to
-    // propagate to the rest of VCS.
-    kc_evNewProposedVideoMode.listen([](const video_mode_s &videoMode)
-    {
-        // If there's an alias for this resolution, force that resolution
-        // instead. Note that forcing the resolution is expected to automatically
-        // fire a capture.newVideoMode event.
-        if (ka_has_alias(videoMode.resolution))
+        k_evEcoModeEnabled.listen([]
         {
-            const resolution_s aliasResolution = ka_aliased(videoMode.resolution);
-            kc_force_capture_resolution(aliasResolution);
-        }
-        else
+            ECO_REFERENCE_TIME = std::chrono::system_clock::now();
+        });
+
+        kc_evUnrecoverableError.listen([]
         {
-            kc_evNewVideoMode.fire(videoMode);
-        }
-    });
+            PROGRAM_EXIT_REQUESTED = true;
+        });
 
-    SUBSYSTEM_RELEASERS.push_back(kvideopreset_initialize());
-    SUBSYSTEM_RELEASERS.push_back(ks_initialize_scaler());
-    SUBSYSTEM_RELEASERS.push_back(kc_initialize_capture());
-    SUBSYSTEM_RELEASERS.push_back(kat_initialize_anti_tear());
-    SUBSYSTEM_RELEASERS.push_back(kf_initialize_filters());
+        kc_evNewVideoMode.listen([](const video_mode_s &videoMode)
+        {
+            INFO((
+                "Video mode: %u x %u at %.3f Hz.",
+                videoMode.resolution.w,
+                videoMode.resolution.h,
+                videoMode.refreshRate.value<double>()
+            ));
+        });
 
-    // Initialize this last.
-    SUBSYSTEM_RELEASERS.push_back(kd_acquire_output_window());
+        // The capture device has received a new video mode. We'll inspect the
+        // mode to see if we think it's acceptable, then allow news of it to
+        // propagate to the rest of VCS.
+        kc_evNewProposedVideoMode.listen([](const video_mode_s &videoMode)
+        {
+            // If there's an alias for this resolution, force that resolution
+            // instead. Note that forcing the resolution is expected to automatically
+            // fire a capture.newVideoMode event.
+            if (ka_has_alias(videoMode.resolution))
+            {
+                const resolution_s aliasResolution = ka_aliased(videoMode.resolution);
+                kc_force_capture_resolution(aliasResolution);
+            }
+            else
+            {
+                kc_evNewVideoMode.fire(videoMode);
+            }
+        });
+    }
+
+    // Initialize subsystems.
+    {
+        SUBSYSTEM_RELEASERS.push_back(kvideopreset_initialize());
+        SUBSYSTEM_RELEASERS.push_back(ks_initialize_scaler());
+        SUBSYSTEM_RELEASERS.push_back(kc_initialize_capture());
+        SUBSYSTEM_RELEASERS.push_back(kat_initialize_anti_tear());
+        SUBSYSTEM_RELEASERS.push_back(kf_initialize_filters());
+
+        // The display subsystem should be initialized last.
+        SUBSYSTEM_RELEASERS.push_back(kd_acquire_output_window());
+    }
+
+    if (kcom_prevent_screensaver())
+    {
+        kd_prevent_screensaver();
+    }
 
     return !PROGRAM_EXIT_REQUESTED;
 }

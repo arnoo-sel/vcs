@@ -36,5 +36,11 @@
                 Set the amount of system memory that VCS reserves on startup. If you're getting error messages about the memory cache running out, increase this value. If you get x264 allocation errors when attempting to record video, try reducing this value. Default: 256 MB.
             </td>
         </tr>
+        <tr>
+            <td>-s</td>
+            <td>
+                Don't prevent the screensaver from activating while VCS is running.
+            </td>
+        </tr>
     </table>
 </dokki-table>

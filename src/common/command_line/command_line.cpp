@@ -21,6 +21,9 @@ unsigned INPUT_CHANNEL_IDX = 0;
 // How many frames the capture card should drop between captures.
 unsigned FRAME_SKIP = 0;
 
+// Whether VCS should attempt to prevent the screensaver from activating.
+bool PREVENT_SCREENSAVER = true;
+
 // The size of VCS's pre-allocated memory cache.
 static unsigned MEM_CACHE_SIZE_MB = 256;
 
@@ -42,10 +45,15 @@ bool kcom_parse_command_line(const int argc, char *const argv[])
                                 "again from the command line.";
 
     int c = 0;
-    while ((c = getopt(argc, argv, "i:m:v:a:f:")) != -1)
+    while ((c = getopt(argc, argv, "i:m:v:a:f:s")) != -1)
     {
         switch (c)
         {
+            case 's':
+            {
+                PREVENT_SCREENSAVER = false;
+                break;
+            }
             case 'i':
             {
                 INPUT_CHANNEL_IDX = strtol(optarg, NULL, 10);
@@ -134,6 +142,11 @@ void kcom_override_video_presets_file_name(const std::string newFilename)
     VIDEO_PRESETS_FILE_NAME = newFilename;
 
     return;
+}
+
+bool kcom_prevent_screensaver(void)
+{
+    return PREVENT_SCREENSAVER;
 }
 
 unsigned kcom_mem_cache_size_mb(void)

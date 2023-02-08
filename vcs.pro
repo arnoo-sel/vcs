@@ -1,8 +1,14 @@
 # Whether this build of VCS is intended for release. Release builds may perform better
 # but have fewer run-time error checks and contain less debug information.
-#DEFINES += VCS_RELEASE_BUILD
+DEFINES += VCS_RELEASE_BUILD
 
 linux {
+    # Select one, depending on whether you're aiming to have VCS run on X11 or Wayland.
+    # Some of VCS's functionality may be available on one but not the other.
+    DEFINES += \
+        VCS_FOR_X11
+        #VCS_FOR_WAYLAND
+
     DEFINES += CAPTURE_BACKEND_VISION_V4L
 
     INCLUDEPATH += \
@@ -12,12 +18,12 @@ linux {
         # ".../visionrgb/include/rgb133control.h".
         $$(HOME)/sdk/
 
-        LIBS += \
-            -L/usr/local/lib/ \
-            -lopencv_imgproc \
-            -lopencv_highgui \
-            -lopencv_core \
-            -lopencv_photo
+    LIBS += \
+        -L/usr/local/lib/ \
+        -lopencv_imgproc \
+        -lopencv_highgui \
+        -lopencv_core \
+        -lopencv_photo
 }
 
 win32 {
@@ -298,6 +304,13 @@ contains(DEFINES, CAPTURE_BACKEND_RGBEASY) {
     linux {
         SOURCES += src/capture/rgbeasy/null_rgbeasy.h
     }
+}
+
+contains(DEFINES, VCS_FOR_X11) {
+    SOURCES += src/display/prevent_screensaver_x11.cpp
+    LIBS += -lX11
+} else {
+    SOURCES += src/display/prevent_screensaver_null.cpp
 }
 
 QT += core gui widgets opengl openglwidgets

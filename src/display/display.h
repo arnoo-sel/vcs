@@ -195,6 +195,12 @@ subsystem_releaser_t kd_acquire_output_window(void);
 void kd_recalculate_filter_graph_chains(void);
 
 /*!
+ * Request the display subsystem to prevent the system's screensaver or display
+ * hibernation from activating while VCS is running.
+ */
+void kd_prevent_screensaver(void);
+
+/*!
  * Asks the GUI to load video presets from the given file.
  *
  * The GUI is expected to inform VCS's video presets subsystem of the new
