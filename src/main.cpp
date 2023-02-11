@@ -32,6 +32,13 @@
 
 #ifdef __SANITIZE_ADDRESS__
     #include <sanitizer/lsan_interface.h>
+    const char* __lsan_default_options()
+    {
+        return (
+            // Prevent __lsan_do_leak_check() from aborting when leaks are found.
+            "exitcode=0:"
+        );
+    }
 #endif
 
 vcs_event_c<void> k_evEcoModeEnabled;
@@ -57,13 +64,13 @@ static void prepare_for_exit(void)
         releaser_fn();
     }
 
-    INFO(("Ready to exit."));
-
     // Force the memory leak check to run now rather than on program exit, so that
     // it ignores allocations that remain on exit and which we let the OS clean up.
     #ifdef __SANITIZE_ADDRESS__
       __lsan_do_leak_check();
     #endif
+
+    INFO(("Ready to exit."));
 
     return;
 }
