@@ -1,6 +1,6 @@
 # Whether this build of VCS is intended for release. Release builds may perform better
 # but have fewer run-time error checks and contain less debug information.
-DEFINES += VCS_RELEASE_BUILD
+#DEFINES += VCS_RELEASE_BUILD
 
 linux {
     # Select one, depending on whether you're aiming to have VCS run on X11 or Wayland.
@@ -327,5 +327,6 @@ UI_DIR = generated_files
     CONFIG = $$replace(CONFIG, "release", "debug")
     linux {
         CONFIG += sanitizer sanitize_address sanitize_undefined
+        DEFINES += _GLIBCXX_DEBUG _GLIBCXX_DEBUG_PEDANTIC
     }
 }
