@@ -100,19 +100,3 @@ The following capture backends are available:
 | CAPTURE_BACKEND_VISION_V4L  | Supports the Datapath VisionRGB range of capture cards on Linux; requires the Datapath Vision driver to be installed. |
 | CAPTURE_BACKEND_VIRTUAL     | Provides a device-independent capture source that generates a test image. Useful for debugging, and doesn't require capture drivers to be installed. |
 | CAPTURE_BACKEND_DOSBOX_MMAP | Allows capturing DOSBox's frame buffer on Linux. Intended for debugging. See [this blog post](https://www.tarpeeksihyvaesoft.com/blog/capturing-dosboxs-frame-buffer-via-shared-memory/) for details.|
-
-## Program flow
-
-VCS is a mostly single-threaded application whose event loop is synchronized to the capture device's rate of output. In general, VCS's main loop polls the capture device until a capture event (e.g. new frame) occurs, then processes the event, and returns to the polling loop.
-
-![](./images/diagrams/code-flow.png)
-
- The above diagram shows a general step-by-step view of VCS's program flow. `Capture` communicates with the capture device (which will typically be running in its own thread), receiving frame data and setting hardware-side capture parameters. `Main` polls `Capture` to receive information about capture events. When it receives a new frame from `Capture`, `Main` sends the frame's data to `Scale` for scaling, which then forwards it to `Filter` for image filtering, which in turn sends it to `Display` to be rendered onto VCS's output window.
-
-| System  | Corresponding source code          |
-| ------- | ---------------------------------- |
-| Main    | [src/main.cpp](./src/main.cpp)     |
-| Capture | [src/capture/*](./src/capture/)    |
-| Scale   | [src/scaler/*](./src/scaler/)      |
-| Filter  | [src/filter/*](./src/filter/)      |
-| Display | [src/display/*](./src/display/)    |
