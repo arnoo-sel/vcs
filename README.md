@@ -41,9 +41,9 @@ VCS is compatible with at least the following Datapath capture cards:
 
 ### User's manual
 
-The VCS user's manual is available for the following versions of VCS:
+The VCS user's manual ([source](./docs/user-manual/)) is available online for the following versions of VCS:
 
-- [master branch](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/) (includes changes not yet released in a versioned distributable)
+- [master branch](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/) (includes changes not yet released with a version tag; updated with a delay)
 - [2.6.0](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/2.6.0/)
 - [2.5.2](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/2.5.2/)
 - [2.5.1](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/2.5.1/)
@@ -57,28 +57,30 @@ The VCS user's manual is available for the following versions of VCS:
 
 ## Building
 
-Run `$ qmake && make` in the repo's root; or open [vcs.pro](vcs.pro) in Qt Creator. You may need to modify some of the include paths in [vcs.pro](vcs.pro) to match your system.
+Open [vcs.pro](vcs.pro) in Qt Creator, or run `$ qmake && make` in the repo's root. You'll need to meet the [dependencies](#dependencies), and may need to modify some of the `INCLUDEPATH` entries in [vcs.pro](vcs.pro) to match your system.
 
 ### Dependencies
 
-The VCS codebase depends on the following third-party libraries and frameworks:
+The VCS codebase depends on the following libraries and frameworks:
 
 1. Qt 5
 2. OpenCV 3.2.0*
-3. The Datapath capture API (RGBEasy on Windows, Vision/Video4Linux on Linux), as distributed with their capture drivers**
+3. The Datapath capture API, as distributed with their Linux capture drivers**
+4. Non-release builds*** are configured to use AddressSanitizer and UndefinedBehaviorSanitizer, which should come pre-installed with your compiler on common platforms. For these builds, you'll need to create a file called **asan-suppress.txt** in the directory of the VCS executable, and either leave it blank, or populate it according to [this guide](https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer#suppressions) to have AddressSanitizer ignore leaks in external code (e.g. third-party libraries).
 
 \* Later versions of OpenCV may also work. See [this issue](https://github.com/leikareipa/vcs/issues/30) for details.\
-\** Only needed if compiling for Datapath hardware, which is the default option. See [The capture backend](#the-capture-backend) for details.
+\** Only needed if compiling for Datapath hardware, which is the default option. See [The capture backend](#the-capture-backend) for details.\
+\*** See [Release build vs. debug build](#release-build-vs-debug-build).
 
 I use the following toolchains when developing VCS:
 
-| OS      | Compiler           | Qt   | OpenCV |
-| ------- | ------------------ | ---- | ------ |
-| Linux   | GCC 9.4 (64-bit)   | 5.12 | 3.2.0  |
+| OS                 | Compiler           | Qt   | OpenCV | Capture card           |
+| ------------------ | ------------------ | ---- | ------ | ---------------------- |
+| Ubuntu 20.04 HWE   | GCC 9.4 (64-bit)   | 5.12 | 3.2.0  | Datapath VisionRGB-E1S |
 
 ### Release build vs. debug build
 
-The default configuration in [vcs.pro](vcs.pro) produces a debug build, with &ndash; among other things &ndash; more copious run-time bounds-checking of memory accesses. The run-time debugging features are expected to reduce performance to some extent, but can help reveal programming errors.
+The default configuration in [vcs.pro](vcs.pro) produces a debug build, which has &ndash; among other things &ndash; more copious run-time bounds-checking of memory accesses. The run-time debugging features are expected to reduce performance to some extent, but can help reveal programming errors.
 
 Defining `VCS_RELEASE_BUILD` globally will produce a release build, with fewer debugging checks in performance-critical sections of the program. Simply uncomment `DEFINES += VCS_RELEASE_BUILD` at the top of [vcs.pro](vcs.pro) and do a full rebuild.
 

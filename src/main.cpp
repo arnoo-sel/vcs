@@ -37,6 +37,11 @@
         return (
             // Prevent __lsan_do_leak_check() from aborting when leaks are found.
             "exitcode=0:"
+
+            // File located in relation to the program executable that optionally
+            // suppresses leak reports for certain sources. For more info, see
+            // https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer#suppression.
+            "suppressions=asan-suppress.txt:"
         );
     }
 #endif
