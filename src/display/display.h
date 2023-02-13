@@ -197,8 +197,10 @@ void kd_recalculate_filter_graph_chains(void);
 /*!
  * Request the display subsystem to prevent the system's screensaver or display
  * hibernation from activating while VCS is running.
+ *
+ * Returns a function that restores the screensaver state.
  */
-void kd_prevent_screensaver(void);
+subsystem_releaser_t kd_prevent_screensaver(void);
 
 /*!
  * Asks the GUI to load video presets from the given file.

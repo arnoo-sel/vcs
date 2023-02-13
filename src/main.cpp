@@ -131,14 +131,13 @@ static bool initialize_all(void)
         SUBSYSTEM_RELEASERS.push_back(kc_initialize_capture());
         SUBSYSTEM_RELEASERS.push_back(kat_initialize_anti_tear());
         SUBSYSTEM_RELEASERS.push_back(kf_initialize_filters());
+        if (kcom_prevent_screensaver())
+        {
+            SUBSYSTEM_RELEASERS.push_back(kd_prevent_screensaver());
+        }
 
         // The display subsystem should be initialized last.
         SUBSYSTEM_RELEASERS.push_back(kd_acquire_output_window());
-    }
-
-    if (kcom_prevent_screensaver())
-    {
-        kd_prevent_screensaver();
     }
 
     return !PROGRAM_EXIT_REQUESTED;

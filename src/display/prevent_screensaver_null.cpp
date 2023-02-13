@@ -7,8 +7,8 @@
 
 #include "display/display.h"
 
-void kd_prevent_screensaver(void)
+subsystem_releaser_t kd_prevent_screensaver(void)
 {
     // This is a dummy implementation that does nothing.
-    return;
+    return []{};
 }
