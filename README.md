@@ -57,7 +57,7 @@ The VCS user's manual ([source](./docs/user-manual/)) is available online for th
 
 ## Building
 
-Open [vcs.pro](vcs.pro) in Qt Creator, or run `$ qmake && make` in the repo's root. You'll need to meet the [dependencies](#dependencies), and may need to modify some of the `INCLUDEPATH` entries in [vcs.pro](vcs.pro) to match your system.
+Open [vcs.pro](vcs.pro) in Qt Creator, or run `$ qmake && make -j` in the repo's root. You'll need to meet the [dependencies](#dependencies), and may need to modify some of the `INCLUDEPATH` entries in [vcs.pro](vcs.pro) to match your system.
 
 ### Dependencies
 
