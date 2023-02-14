@@ -24,9 +24,6 @@ unsigned FRAME_SKIP = 0;
 // Whether VCS should attempt to prevent the screensaver from activating.
 bool PREVENT_SCREENSAVER = true;
 
-// The size of VCS's pre-allocated memory cache.
-static unsigned MEM_CACHE_SIZE_MB = 256;
-
 // Name of (and path to) the capture parameter file on disk.
 static std::string VIDEO_PRESETS_FILE_NAME = "";
 
@@ -45,7 +42,7 @@ bool kcom_parse_command_line(const int argc, char *const argv[])
                                 "again from the command line.";
 
     int c = 0;
-    while ((c = getopt(argc, argv, "i:m:v:a:f:s")) != -1)
+    while ((c = getopt(argc, argv, "i:v:a:f:s")) != -1)
     {
         switch (c)
         {
@@ -77,28 +74,6 @@ bool kcom_parse_command_line(const int argc, char *const argv[])
                     // VCS expects the channel index to be 0-indexed, so let's convert.
                     INPUT_CHANNEL_IDX--;
                 }
-
-                break;
-            }
-            case 'm':
-            {
-                const int minSize = 1;
-                const int maxSize = 8192;
-
-                int size = strtol(optarg, NULL, 10);
-
-                if ((size < minSize) ||
-                    (size > maxSize))
-                {
-                    NBENE(("Memory cache size (-m) is out of bounds. Expected range: %d-%d.",
-                           minSize, maxSize));
-
-                    kd_show_headless_error_message("", parseFailMsg);
-
-                    return false;
-                }
-
-                MEM_CACHE_SIZE_MB = unsigned(size);
 
                 break;
             }
@@ -147,11 +122,6 @@ void kcom_override_video_presets_file_name(const std::string newFilename)
 bool kcom_prevent_screensaver(void)
 {
     return PREVENT_SCREENSAVER;
-}
-
-unsigned kcom_mem_cache_size_mb(void)
-{
-    return MEM_CACHE_SIZE_MB;
 }
 
 const std::string& kcom_aliases_file_name(void)

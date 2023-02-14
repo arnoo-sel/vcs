@@ -12,7 +12,6 @@
 bool kcom_parse_command_line(const int argc, char *const argv[]);
 
 bool kcom_prevent_screensaver(void);
-unsigned kcom_mem_cache_size_mb(void);
 const std::string& kcom_aliases_file_name(void);
 const std::string& kcom_filter_graph_file_name(void);
 const std::string& kcom_video_presets_file_name(void);
