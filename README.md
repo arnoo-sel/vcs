@@ -40,6 +40,7 @@ VCS is compatible with at least the following Datapath capture cards:
 The VCS user's manual ([source](./docs/user-manual/)) is available online for the following versions of VCS:
 
 - [master branch](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/) (includes changes not yet released with a version tag; updated with a delay)
+- [2.7.0](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/2.7.0/)
 - [2.6.0](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/2.6.0/)
 - [2.5.2](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/2.5.2/)
 - [2.5.1](https://www.tarpeeksihyvaesoft.com/vcs/docs/user-manual/2.5.1/)
