@@ -218,13 +218,6 @@ void kd_load_video_presets(const std::string &filename);
 void kd_load_filter_graph(const std::string &filename);
 
 /*!
- * Asks the GUI to load alias resolutions from the given file.
- *
- * The GUI is expected to inform VCS's alias subsystem of the new aliases.
- */
-void kd_load_aliases(const std::string &filename);
-
-/*!
  * Asks the GUI to refresh the output window's title bar text.
  *
  * VCS assumes that the output window's title bar displays certain information

@@ -22,7 +22,6 @@
 #include "capture/capture.h"
 #include "display/display.h"
 #include "common/globals.h"
-#include "capture/alias.h"
 #include "scaler/scaler.h"
 #include "filter/filter.h"
 #include "capture/video_presets.h"
@@ -109,18 +108,7 @@ static bool initialize_all(void)
         // propagate to the rest of VCS.
         kc_evNewProposedVideoMode.listen([](const video_mode_s &videoMode)
         {
-            // If there's an alias for this resolution, force that resolution
-            // instead. Note that forcing the resolution is expected to automatically
-            // fire a capture.newVideoMode event.
-            if (ka_has_alias(videoMode.resolution))
-            {
-                const resolution_s aliasResolution = ka_aliased(videoMode.resolution);
-                kc_force_capture_resolution(aliasResolution);
-            }
-            else
-            {
-                kc_evNewVideoMode.fire(videoMode);
-            }
+            kc_evNewVideoMode.fire(videoMode);
         });
     }
 
@@ -225,7 +213,6 @@ static void load_user_data(void)
 {
     kd_load_video_presets(kcom_video_presets_file_name());
     kd_load_filter_graph(kcom_filter_graph_file_name());
-    kd_load_aliases(kcom_aliases_file_name());
 
     return;
 }

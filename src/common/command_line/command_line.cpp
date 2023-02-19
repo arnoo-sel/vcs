@@ -27,9 +27,6 @@ bool PREVENT_SCREENSAVER = true;
 // Name of (and path to) the capture parameter file on disk.
 static std::string VIDEO_PRESETS_FILE_NAME = "";
 
-// Name of (and path to) the alias file on disk.
-static std::string ALIAS_FILE_NAME = "";
-
 // Name of (and path to) the filter set file on disk.
 static std::string FILTER_GRAPH_FILE_NAME = "";
 
@@ -42,7 +39,7 @@ bool kcom_parse_command_line(const int argc, char *const argv[])
                                 "again from the command line.";
 
     int c = 0;
-    while ((c = getopt(argc, argv, "i:v:a:f:s")) != -1)
+    while ((c = getopt(argc, argv, "i:v:f:s")) != -1)
     {
         switch (c)
         {
@@ -82,11 +79,6 @@ bool kcom_parse_command_line(const int argc, char *const argv[])
                 VIDEO_PRESETS_FILE_NAME = optarg;
                 break;
             }
-            case 'a':
-            {
-                ALIAS_FILE_NAME = optarg;
-                break;
-            }
             case 'f':
             {
                 FILTER_GRAPH_FILE_NAME = optarg;
@@ -105,13 +97,6 @@ void kcom_override_filter_graph_file_name(const std::string newFilename)
     return;
 }
 
-void kcom_override_aliases_file_name(const std::string newFilename)
-{
-    ALIAS_FILE_NAME = newFilename;
-
-    return;
-}
-
 void kcom_override_video_presets_file_name(const std::string newFilename)
 {
     VIDEO_PRESETS_FILE_NAME = newFilename;
@@ -122,11 +107,6 @@ void kcom_override_video_presets_file_name(const std::string newFilename)
 bool kcom_prevent_screensaver(void)
 {
     return PREVENT_SCREENSAVER;
-}
-
-const std::string& kcom_aliases_file_name(void)
-{
-    return ALIAS_FILE_NAME;
 }
 
 const std::string& kcom_filter_graph_file_name(void)

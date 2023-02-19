@@ -18,7 +18,6 @@ class FilterGraphDialog;
 class AntiTearDialog;
 class OverlayDialog;
 class SignalDialog;
-class AliasDialog;
 class AboutDialog;
 class VCSBaseDialog;
 class QAction;
@@ -75,7 +74,6 @@ public:
     AntiTearDialog* anti_tear_dialog(void)                 const { return this->antitearDlg; }
     OverlayDialog* overlay_dialog(void)                    const { return this->overlayDlg; }
     SignalDialog* signal_info_dialog(void)                 const { return this->signalDlg; }
-    AliasDialog* alias_resolutions_dialog(void)            const { return this->aliasDlg; }
     AboutDialog* about_dialog(void)                        const { return this->aboutDlg; }
 
 signals:
@@ -115,7 +113,6 @@ private:
     AntiTearDialog *antitearDlg = nullptr;
     OverlayDialog *overlayDlg = nullptr;
     SignalDialog *signalDlg = nullptr;
-    AliasDialog *aliasDlg = nullptr;
     AboutDialog *aboutDlg = nullptr;
 
     // A master list of all the dialogs that this window spawns. Will be filled in

@@ -55,17 +55,6 @@ bool kdisk_save_filter_graph(const std::vector<BaseFilterGraphNode*> &nodes,
                              const std::string &filename);
 
 /*!
- * Saves the given alias resolutions into a file named @p filename.
- * 
- * Returns true on success, false otherwise.
- * 
- * @see
- * kdisk_load_aliases()
- */
-bool kdisk_save_aliases(const std::vector<resolution_alias_s> &aliases,
-                        const std::string &filename);
-
-/*!
  * Loads the video presets stored in the file named @p filename.
  * 
  * Returns the loaded video presets. If the loading fails, returns an empty vector.
@@ -84,15 +73,5 @@ std::vector<video_preset_s*> kdisk_load_video_presets(const std::string &filenam
  * kdisk_save_filter_graph()
  */
 std::vector<abstract_filter_graph_node_s> kdisk_load_filter_graph(const std::string &filename);
-
-/*!
- * Loads the capture resolution aliases stored in the file named @p filename.
- * 
- * Returns the loaded aliases. If the loading fails, returns an empty vector.
- * 
- * @see
- * kdisk_save_aliases()
- */
-std::vector<resolution_alias_s> kdisk_load_aliases(const std::string &filename);
 
 #endif

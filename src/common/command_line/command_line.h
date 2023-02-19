@@ -17,7 +17,6 @@ const std::string& kcom_filter_graph_file_name(void);
 const std::string& kcom_video_presets_file_name(void);
 
 void kcom_override_filter_graph_file_name(const std::string newFilename);
-void kcom_override_aliases_file_name(const std::string newFilename);
 void kcom_override_video_presets_file_name(const std::string newFilename);
 
 #endif

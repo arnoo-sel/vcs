@@ -20,12 +20,9 @@
 #include "common/disk/file_writers/file_writer_video_params.h"
 #include "common/disk/file_readers/file_reader_filter_graph.h"
 #include "common/disk/file_writers/file_writer_filter_graph.h"
-#include "common/disk/file_writers/file_writer_aliases.h"
-#include "common/disk/file_readers/file_reader_aliases.h"
 #include "common/propagate/vcs_event.h"
 #include "capture/capture.h"
 #include "capture/video_presets.h"
-#include "capture/alias.h"
 #include "filter/filter.h"
 #include "common/disk/disk.h"
 
@@ -136,74 +133,6 @@ std::vector<video_preset_s*> kdisk_load_video_presets(const std::string &filenam
                                    "No data was loaded. More information about the error "
                                    "may be found in the terminal.");
     return {};
-}
-
-std::vector<resolution_alias_s> kdisk_load_aliases(const std::string &filename)
-{
-    if (filename.empty())
-    {
-        DEBUG(("No alias file defined, skipping."));
-        return {};
-    }
-
-    const std::string fileVersion = file_reader::file_version(filename);
-
-    std::vector<resolution_alias_s> aliases;
-
-    if (fileVersion.empty())
-    {
-        if (!file_reader::aliases::legacy_1_6_5::read(filename, &aliases))
-        {
-            goto fail;
-        }
-    }
-    else if (fileVersion == "a")
-    {
-        if (!file_reader::aliases::version_a::read(filename, &aliases))
-        {
-            goto fail;
-        }
-    }
-    else
-    {
-        NBENE(("Unsupported alias file format."));
-        goto fail;
-    }
-
-    // Sort the aliases so they display more nicely in the GUI.
-    std::sort(aliases.begin(), aliases.end(), [](const resolution_alias_s &a, const resolution_alias_s &b)
-    {
-        return (a.to.w * a.to.h) < (b.to.w * b.to.h);
-    });
-
-    INFO(("Loaded %u alias(es).", aliases.size()));
-
-    return aliases;
-
-    fail:
-    kd_show_headless_error_message("Data was not loaded",
-                                   "An error was encountered while loading aliases. No data was "
-                                   "loaded. More information about the error may be found in "
-                                   "the terminal.");
-    return {};
-}
-
-bool kdisk_save_aliases(const std::vector<resolution_alias_s> &aliases,
-                        const std::string &filename)
-{
-    if (!file_writer::aliases::version_a::write(filename, aliases))
-    {
-        goto fail;
-    }
-
-    return true;
-
-    fail:
-    kd_show_headless_error_message("Data was not saved",
-                                   "An error was encountered while preparing the alias "
-                                   "resolutions for saving. As a result, no data was saved. \n\nMore "
-                                   "information about this error may be found in the terminal.");
-    return false;
 }
 
 bool kdisk_save_filter_graph(const std::vector<BaseFilterGraphNode*> &nodes,

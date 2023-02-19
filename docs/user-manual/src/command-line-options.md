@@ -25,12 +25,6 @@
             </td>
         </tr>
         <tr>
-            <td>-a <i>&lt;path&gt;</i></td>
-            <td>
-                Load alias resolutions from the given file on start-up. Alias resolution files typically have the .vcs-alias suffix.
-            </td>
-        </tr>
-        <tr>
             <td>-s</td>
             <td>
                 Don't prevent the screensaver from activating while VCS is running.

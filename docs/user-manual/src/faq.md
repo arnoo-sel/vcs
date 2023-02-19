@@ -34,8 +34,6 @@ The capture hardware may not always correctly sense the resolution of the input 
 
 You can use the [Input resolution dialog](#dialog-windows-input-resolution-dialog) to manually correct the resolution.
 
-If you find that a particular resolution is consistently misidentified by the capture hardware, you can have VCS correct it automatically via the [Alias resolutions dialog](#dialog-windows-alias-resolutions-dialog).
-
 ## Resizing the capture window
 
 The size of the capture window can be changed via the [Output resolution dialog](#dialog-windows-output-resolution-dialog).

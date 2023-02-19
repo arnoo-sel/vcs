@@ -14,13 +14,11 @@
 #include "display/qt/windows/output_window.h"
 #include "display/qt/dialogs/video_presets_dialog.h"
 #include "display/qt/dialogs/filter_graph_dialog.h"
-#include "display/qt/dialogs/alias_dialog.h"
 #include "display/qt/dialogs/output_resolution_dialog.h"
 #include "display/qt/dialogs/signal_dialog.h"
 #include "capture/capture.h"
 #include "common/globals.h"
 #include "filter/filter.h"
-#include "capture/alias.h"
 #include "common/log/log.h"
 
 // We'll want to avoid accessing the GUI via non-GUI threads, so let's assume
@@ -107,12 +105,6 @@ void kd_load_filter_graph(const std::string &filename)
 {
     ASSERT_WINDOW_IS_NOT_NULL;
     WINDOW->filter_graph_dialog()->load_graph_from_file(QString::fromStdString(filename));
-}
-
-void kd_load_aliases(const std::string &filename)
-{
-    ASSERT_WINDOW_IS_NOT_NULL;
-    WINDOW->alias_resolutions_dialog()->load_aliases_from_file(QString::fromStdString(filename));
 }
 
 bool kd_is_fullscreen(void)

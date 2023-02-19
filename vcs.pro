@@ -85,7 +85,6 @@ SOURCES += \
     src/display/qt/dialogs/resolution_dialog.cpp \
     src/display/qt/d_main.cpp \
     src/display/qt/dialogs/overlay_dialog.cpp \
-    src/display/qt/dialogs/alias_dialog.cpp \
     src/display/qt/dialogs/anti_tear_dialog.cpp \
     src/anti_tear/anti_tear_multiple_per_frame.cpp \
     src/anti_tear/anti_tear_one_per_frame.cpp \
@@ -132,7 +131,6 @@ SOURCES += \
     src/anti_tear/anti_tear.cpp \
     src/display/qt/persistent_settings.cpp \
     src/common/disk/disk.cpp \
-    src/capture/alias.cpp \
     src/display/qt/subclasses/QOpenGLWidget_opengl_renderer.cpp \
     src/display/qt/subclasses/QGraphicsItem_interactible_node_graph_node.cpp \
     src/display/qt/subclasses/QGraphicsScene_interactible_node_graph.cpp \
@@ -147,14 +145,11 @@ SOURCES += \
     src/common/disk/file_reader.cpp \
     src/common/disk/file_readers/file_reader_filter_graph_version_b.cpp \
     src/common/disk/file_readers/file_reader_filter_graph_version_a.cpp \
-    src/common/disk/file_writers/file_writer_aliases_version_a.cpp \
-    src/common/disk/file_readers/file_reader_aliases_version_a.cpp \
     src/common/disk/file_readers/file_reader_video_params_legacy_1_6_5.cpp \
     src/common/disk/file_writers/file_writer_video_params_legacy_1_6_5.cpp \
     src/common/disk/file_writer.cpp \
     src/common/disk/file_writers/file_writer_video_params_version_a.cpp \
     src/common/disk/file_readers/file_reader_video_params_version_a.cpp \
-    src/common/disk/file_readers/file_reader_aliases_legacy_1_6_5.cpp \
     src/display/qt/dialogs/filter_graph/output_gate_node.cpp \
     src/display/qt/dialogs/filter_graph/input_gate_node.cpp \
     src/display/qt/dialogs/filter_graph/filter_node.cpp \
@@ -234,7 +229,6 @@ HEADERS += \
     src/display/display.h \
     src/common/log/log.h \
     src/display/qt/dialogs/overlay_dialog.h \
-    src/display/qt/dialogs/alias_dialog.h \
     src/anti_tear/anti_tear.h \
     src/display/qt/dialogs/anti_tear_dialog.h \
     src/filter/filter.h \
@@ -243,7 +237,6 @@ HEADERS += \
     src/display/qt/utility.h \
     src/common/disk/csv.h \
     src/common/disk/disk.h \
-    src/capture/alias.h \
     src/display/qt/subclasses/QOpenGLWidget_opengl_renderer.h \
     src/display/qt/subclasses/QGraphicsItem_interactible_node_graph_node.h \
     src/display/qt/subclasses/QGraphicsScene_interactible_node_graph.h \
@@ -259,7 +252,6 @@ HEADERS += \
     src/common/disk/file_readers/file_reader_filter_graph.h \
     src/common/disk/file_reader.h \
     src/common/disk/file_streamer.h \
-    src/common/disk/file_writers/file_writer_aliases.h \
     src/common/disk/file_readers/file_reader_video_params.h \
     src/common/disk/file_writers/file_writer_video_params.h \
     src/common/disk/file_writer.h \
@@ -279,7 +271,6 @@ FORMS += \
     src/display/qt/windows/ui/output_window.ui \
     src/display/qt/dialogs/ui/overlay_dialog.ui \
     src/display/qt/dialogs/ui/resolution_dialog.ui \
-    src/display/qt/dialogs/ui/alias_dialog.ui \
     src/display/qt/dialogs/ui/anti_tear_dialog.ui \
     src/display/qt/dialogs/ui/filter_graph_dialog.ui \
     src/display/qt/dialogs/ui/about_dialog.ui \
