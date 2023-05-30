@@ -102,7 +102,7 @@ VideoPresetsDialog::VideoPresetsDialog(QWidget *parent) :
 
         // The file format we save presets into reserves the { and } characters;
         // these characters shouldn't occur in preset names.
-        ui->lineEdit_presetName->setValidator(new QRegExpValidator(QRegExp("[^{}]*"), this));
+        ui->lineEdit_presetName->setValidator(new QRegularExpressionValidator(QRegularExpression("[^{}]*"), this));
 
         ui->pushButton_resolutionSeparator->setText("\u00d7");
 

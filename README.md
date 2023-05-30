@@ -1,3 +1,13 @@
+# Fork notes
+
+This fork of leikareipa's VCS aim to:
+- maintain a 64-bit Windows version, and provide executables for it
+
+This branch differs from VCS v2.6.1 in the following way:
+- Qt5 replaced with Qt6 (6.5.1)
+
+Below is the original README:
+
 # VCS
 
 A well-featured control application for Datapath's VisionRGB capture cards, with a feature-set targeted especially at retro enthusiasts.

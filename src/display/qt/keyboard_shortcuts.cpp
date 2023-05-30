@@ -10,6 +10,7 @@
 
 #include <QKeySequence>
 #include <QShortcut>
+#include <QWidget>
 #include <unordered_map>
 #include "display/qt/keyboard_shortcuts.h"
 #include "common/assert.h"

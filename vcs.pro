@@ -24,24 +24,27 @@ linux {
 win32 {
     DEFINES += CAPTURE_BACKEND_RGBEASY
 
+    # The paths below assume:
+    # - the RGBEASY library, as found in VisionCaptureSDKs_v7.19.4, is found in the parent folder
+    # - a MingGW-x64 build of OpenCV 3.4.14, is found in the parent folder
+
     INCLUDEPATH += \
-        "C:/VisionSDK/RGBEASY 1.0/INCLUDE" \
-        "C:/OpenCV/3.2.0/include"
+        "../RGBEASY/C/INCLUDE" \
+        "../opencv-3.4.14/mingw/install/include"
 
     LIBS += \
-        "C:/VisionSDK/RGBEASY 1.0/LIB/Win32/Release/RGBEASY.lib" \
-        -L"C:/OpenCV/3.2.0/bin/mingw" \
-        -lopencv_world320
+        "../RGBEASY/C/LIB/x64/Release/RGBEASY.lib" \
+        -L"../opencv-3.4.14/mingw/install/x64/mingw/lib" \
+        -lopencv_world3414
 
     RC_ICONS = "src/display/qt/images/icons/appicon.ico"
 }
 
-QT += core gui
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui widgets opengl openglwidgets
 
 TARGET = vcs
 TEMPLATE = app
-CONFIG += console c++11
+CONFIG += console c++17
 
 OBJECTS_DIR = generated_files
 RCC_DIR = generated_files
@@ -329,5 +332,5 @@ QMAKE_CXXFLAGS += \
     -Wall \
     -pipe \
     -pedantic \
-    -std=c++11 \
+    -std=c++17 \
     -Wno-missing-field-initializers

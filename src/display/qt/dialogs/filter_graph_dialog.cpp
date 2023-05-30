@@ -423,7 +423,7 @@ BaseFilterGraphNode* FilterGraphDialog::add_filter_graph_node(
 
     FilterGUIForQt *const guiWidget = new FilterGUIForQt(filter);
 
-    const unsigned titleWidth = (10 + QFontMetrics(guiWidget->font()).width(QString("999: %1").arg(QString::fromStdString(filter->name()))));
+    const unsigned titleWidth = (10 + QFontMetrics(guiWidget->font()).horizontalAdvance(QString("999: %1").arg(QString::fromStdString(filter->name()))));
     guiWidget->resize(std::max(titleWidth, unsigned(guiWidget->width())), guiWidget->height());
 
     const unsigned filterWidgetWidth = (10 + guiWidget->width());

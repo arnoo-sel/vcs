@@ -31,7 +31,7 @@ OverlayDialog::OverlayDialog(QWidget *parent) :
 
     this->set_name("Overlay editor");
 
-    ui->plainTextEdit->setTabStopWidth(22);
+    ui->plainTextEdit->setTabStopDistance(22);
 
     // Create the dialog's menu bar.
     {

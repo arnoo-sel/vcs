@@ -67,7 +67,7 @@
         <property name="lineWrapMode">
          <enum>QPlainTextEdit::NoWrap</enum>
         </property>
-        <property name="tabStopWidth">
+        <property name="tabStopDistance">
          <number>15</number>
         </property>
         <property name="placeholderText">

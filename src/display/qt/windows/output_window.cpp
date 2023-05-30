@@ -9,11 +9,13 @@
  *
  */
 
+#include <QRegularExpression>
 #include <QElapsedTimer>
 #include <QTextDocument>
 #include <QElapsedTimer>
 #include <QFontDatabase>
 #include <QInputDialog>
+#include <QActionGroup>
 #include <QVBoxLayout>
 #include <QTreeWidget>
 #include <QMessageBox>
@@ -21,7 +23,6 @@
 #include <QDateTime>
 #include <QShortcut>
 #include <QPainter>
-#include <QRegExp>
 #include <QScreen>
 #include <QImage>
 #include <QMenu>
@@ -78,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Set up a layout for the central widget, so we can add the OpenGL
     // render surface to it when/if OpenGL is enabled.
     QVBoxLayout *const mainLayout = new QVBoxLayout(ui->centralwidget);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
 
     this->magnifyingGlass = new MagnifyingGlass(this);
@@ -1105,7 +1106,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     if (kc_is_receiving_signal() &&
         this->isActiveWindow() &&
         this->rect().contains(this->mapFromGlobal(QCursor::pos())) &&
-        (QGuiApplication::mouseButtons() & Qt::MidButton))
+        (QGuiApplication::mouseButtons() & Qt::MiddleButton))
     {
         this->magnifyingGlass->magnify(frameImage, this->mapFromGlobal(QCursor::pos()));
     }
@@ -1239,7 +1240,7 @@ void MainWindow::save_screenshot(void)
             if (QFile::exists(filename))
             {
                 // Append the current time's milliseconds, for some protection against filename collisions.
-                filename.replace(QRegExp(".png$"), QString(".%1.png").arg(QTime::currentTime().toString("z")));
+                filename.replace(QRegularExpression(".png$"), QString(".%1.png").arg(QTime::currentTime().toString("z")));
             }
 
             return filename;

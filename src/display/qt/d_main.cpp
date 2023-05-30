@@ -34,7 +34,7 @@ namespace app_n
     static int ARGC = 1;
     static char NAME[] = "VCS";
     static char *ARGV = NAME;
-    static QApplication *const APP = new QApplication(ARGC, &ARGV);
+    static QApplication *APP = nullptr;
 }
 
 // The window we'll display the program in. Also owns the various sub-dialogs, etc.
@@ -53,6 +53,9 @@ void kd_recalculate_filter_graph_chains(void)
 void kd_acquire_output_window(void)
 {
     DEBUG(("Acquiring a display."));
+
+    QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+    app_n::APP = new QApplication(app_n::ARGC, &app_n::ARGV);
 
     WINDOW = new MainWindow;
     WINDOW->show();
