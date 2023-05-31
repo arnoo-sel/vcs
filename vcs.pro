@@ -187,8 +187,6 @@ HEADERS += \
     src/filter/filters/filters.h \
     src/filter/filters/flip/filter_flip.h \
     src/filter/filters/flip/gui/filtergui_flip.h \
-    src/filter/filters/eye_dropper/filter_eye_dropper.h \
-    src/filter/filters/eye_dropper/gui/filtergui_eye_dropper.h \
     src/filter/filters/output_scaler/filter_output_scaler.h \
     src/filter/filters/output_scaler/gui/filtergui_output_scaler.h \
     src/filter/filters/render_text/font.h \
@@ -314,5 +312,7 @@ UI_DIR = generated_files
 
 !contains(DEFINES, VCS_RELEASE_BUILD) {
     CONFIG = $$replace(CONFIG, "release", "debug")
-    CONFIG += sanitizer sanitize_address sanitize_undefined
+    linux {
+        CONFIG += sanitizer sanitize_address sanitize_undefined
+    }
 }
