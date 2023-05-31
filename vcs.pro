@@ -126,7 +126,6 @@ SOURCES += \
     src/capture/capture.cpp \
     src/anti_tear/anti_tear.cpp \
     src/display/qt/persistent_settings.cpp \
-    src/common/memory/memory.cpp \
     src/common/disk/disk.cpp \
     src/capture/alias.cpp \
     src/display/qt/subclasses/QOpenGLWidget_opengl_renderer.cpp \
@@ -238,8 +237,6 @@ HEADERS += \
     src/display/qt/persistent_settings.h \
     src/display/qt/utility.h \
     src/common/disk/csv.h \
-    src/common/memory/memory.h \
-    src/common/memory/heap_mem.h \
     src/common/disk/disk.h \
     src/capture/alias.h \
     src/display/qt/subclasses/QOpenGLWidget_opengl_renderer.h \

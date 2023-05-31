@@ -140,7 +140,7 @@ namespace rgbeasy_callbacks_n
 
             // The capture device sent in a frame before the local buffer into which
             // VCS wants to copy the frame had been allocated.
-            if (FRAME_BUFFER.pixels.is_null())
+            if (FRAME_BUFFER.pixels == nullptr)
             {
                 goto done;
             }
@@ -175,9 +175,9 @@ namespace rgbeasy_callbacks_n
 
         // Copy the frame's data into our local buffer so we can work on it.
         std::memcpy(
-            FRAME_BUFFER.pixels.data(),
+            FRAME_BUFFER.pixels,
             (u8*)frameData,
-            FRAME_BUFFER.pixels.size_check(FRAME_BUFFER.r.w * FRAME_BUFFER.r.h * (FRAME_BUFFER.r.bpp / 8))
+            FRAME_BUFFER.r.w * FRAME_BUFFER.r.h * (FRAME_BUFFER.r.bpp / 8)
         );
 
         push_capture_event(capture_event_e::new_frame);
@@ -364,7 +364,7 @@ bool kc_initialize_device(void)
 {
     DEBUG(("Initializing the RGBEASY capture device."));
 
-    FRAME_BUFFER.pixels.allocate(MAX_NUM_BYTES_IN_CAPTURED_FRAME, "Capture frame buffer (RGBEASY)");
+    FRAME_BUFFER.pixels = new uint8_t[MAX_NUM_BYTES_IN_CAPTURED_FRAME]();
 
     // Open an input on the capture hardware, and have it start sending in frames.
     if (!initialize_hardware() ||
@@ -388,7 +388,7 @@ bool kc_release_device(void)
 {
     DEBUG(("Releasing the capture device."));
 
-    FRAME_BUFFER.pixels.release();
+    delete [] FRAME_BUFFER.pixels;
 
     if (stop_capture() &&
         release_hardware())
