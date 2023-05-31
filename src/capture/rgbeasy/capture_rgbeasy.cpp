@@ -363,6 +363,7 @@ static bool stop_capture(void)
 bool kc_initialize_device(void)
 {
     DEBUG(("Initializing the RGBEASY capture device."));
+    k_assert(!FRAME_BUFFER.pixels, "Attempting to doubly initialize the capture device.");
 
     FRAME_BUFFER.pixels = new uint8_t[MAX_NUM_BYTES_IN_CAPTURED_FRAME]();
 
