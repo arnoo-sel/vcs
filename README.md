@@ -1,10 +1,6 @@
 # Fork notes
 
-This fork of leikareipa's VCS aim to:
-- maintain a 64-bit Windows version, and provide executables for it
-
-This branch differs from VCS v2.6.1 in the following way:
-- Qt5 replaced with Qt6 (6.5.1)
+This fork of leikareipa's VCS aim to maintain a 64-bit Windows version, and provide executables for it.
 
 Below is the original README:
 
