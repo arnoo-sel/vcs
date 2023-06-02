@@ -27,8 +27,6 @@ QHeaderView::section,
 QAbstractItemView,
 QTreeWidget QHeaderView::section
 {
-    font-family: "MS Sans Serif";
-
     /* This value will be set programmatically.*/
     font-size: %FONT_SIZE%;
 }
