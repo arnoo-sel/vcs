@@ -24,6 +24,13 @@ linux {
         -lopencv_highgui \
         -lopencv_core \
         -lopencv_photo
+
+    contains(DEFINES, VCS_FOR_X11) {
+        SOURCES += src/display/prevent_screensaver_x11.cpp
+        LIBS += -lX11 -lXext
+    } else {
+        SOURCES += src/display/prevent_screensaver_null.cpp
+    }
 }
 
 win32 {
@@ -41,6 +48,8 @@ win32 {
         "../RGBEASY/C/LIB/x64/Release/RGBEASY.lib" \
         -L"../opencv-3.4.14/mingw/install/x64/mingw/lib" \
         -lopencv_world3414
+
+    SOURCES += src/display/prevent_screensaver_windows.cpp
 
     RC_ICONS = "src/display/qt/images/icons/appicon.ico"
 }
@@ -304,13 +313,6 @@ contains(DEFINES, CAPTURE_BACKEND_RGBEASY) {
     linux {
         SOURCES += src/capture/rgbeasy/null_rgbeasy.h
     }
-}
-
-contains(DEFINES, VCS_FOR_X11) {
-    SOURCES += src/display/prevent_screensaver_x11.cpp
-    LIBS += -lX11 -lXext
-} else {
-    SOURCES += src/display/prevent_screensaver_null.cpp
 }
 
 QT += core gui widgets opengl openglwidgets
