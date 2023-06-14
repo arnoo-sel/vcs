@@ -9,17 +9,14 @@
 
 #include <QVariant>
 
-// Group names for the settings ini file.
-#define INI_GROUP_INPUT                 "INPUT"
-#define INI_GROUP_OUTPUT                "OUTPUT"
-#define INI_GROUP_ANTI_TEAR             "ANTI_TEAR"
-#define INI_GROUP_RECORDING             "RECORDING"
-#define INI_GROUP_GEOMETRY              "DIALOG_GEOMETRY"
-#define INI_GROUP_OVERLAY               "OVERLAY"
-#define INI_GROUP_APP                   "APP"
-#define INI_GROUP_VIDEO_PRESETS         "VIDEO_PRESETS"
-#define INI_GROUP_FILTER_GRAPH          "FILTER_GRAPH"
-#define INI_GROUP_ALIAS_RESOLUTIONS     "ALIAS_RESOLUTIONS"
+// Group names for the settings INI file.
+#define INI_GROUP_APP "App"
+#define INI_GROUP_INPUT "Input"
+#define INI_GROUP_CAPTURE "Capture"
+#define INI_GROUP_FILTER_GRAPH "FilterGraph"
+#define INI_GROUP_OVERLAY "Overlay"
+#define INI_GROUP_VIDEO_PRESETS "VideoPresets"
+#define INI_GROUP_OUTPUT_WINDOW "OutputWindow"
 
 QVariant kpers_value_of(const QString &group, const QString &name, const QVariant &defaultValue = QVariant());
 

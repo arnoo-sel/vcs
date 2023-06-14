@@ -34,7 +34,6 @@ QFrame
 {
     background-color: transparent;
     border: none;
-    margin-top: 3px;
 }
 
 QScrollArea
@@ -45,13 +44,13 @@ QScrollArea
 
 QGraphicsView
 {
-    background-color: #353535;
+    background-color: #303030;
     margin: 0;
     border: none;
     border-radius: 0;
 }
 
-QDialog[objectName="FilterGraphDialog"] QStatusBar::item
+VCSBaseDialog QStatusBar::item
 {
     border: 0px;
 }
@@ -90,8 +89,10 @@ QGroupBox > QLabel
 
 QGroupBox > PropertyTable
 {
+    margin: 0;
     margin-left: 6px;
     margin-right: 6px;
+    padding: 0;
 }
 
 QDialog[objectName="OverlayDialog"] QPlainTextEdit,
@@ -105,29 +106,10 @@ QDialog[objectName="OverlayDialog"] QGroupBox
 
 QDialog[objectName="OverlayDialog"] QPlainTextEdit
 {
-    padding: 0;
     background-color: #303030;
     color: #d9d9d9;
     selection-color: white;
     selection-background-color: #808080;
-}
-
-QDialog[objectName="InputResolutionDialog"] QFrame
-{
-    margin: 6px;
-    margin-bottom: 9px;
-}
-
-QDialog[objectName="VideoPresetsDialog"] QLabel[objectName="label_warnOfDigitalInput"],
-QDialog[objectName="InputResolutionDialog"] QLabel[objectName="label_warnOfDigitalInput"]
-{
-    padding: 9px;
-    color: #ababab;
-}
-
-QDialog[objectName="InputResolutionDialog"] QLabel[objectName="label_warnOfDigitalInput"]
-{
-    padding-bottom: 6px;
 }
 
 QDialog[objectName="VideoPresetsDialog"] QLabel[objectName="label_isPresetCurrentlyActive"]
@@ -322,27 +304,16 @@ QGroupBox
     border: none;
 }
 
-QGroupBox > QGroupBox
+QGroupBox > QGroupBox,
+VCSBaseDialog QGroupBox
 {
     margin: 0;
     padding-left: 8px;
     padding-right: 8px;
-    margin-top: 3px;
-    padding-top: 1.6em;
+    padding-top: 1.65em;
     background-color: #454545;
     color: #e0e0e0;
     border: 1px solid black;
-}
-
-QDialog[objectName="AliasDialog"] QGroupBox > QGroupBox
-{
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-QGroupBox[objectName="groupBox_videoPresetName"]
-{
-    margin-top: 0;
 }
 
 QGroupBox::title
@@ -848,4 +819,41 @@ QScrollBar::sub-line:horizontal:pressed
 QPushButton:flat
 {
     border: none;
+}
+
+QDialog[objectName="ControlPanelDialog"] QFrame[objectName="contentContainer"]
+{
+    background-color: #303030;
+}
+
+QDialog[objectName="ControlPanelDialog"] QFrame[objectName="buttonsContainer"]
+{
+    background-color: #202020;
+}
+
+QDialog[objectName="ControlPanelDialog"] QFrame[objectName="buttonsContainer"] QPushButton
+{
+    min-height: 45px;
+    border-radius: 0;
+    text-align: right;
+    padding-left: 1.4em;
+    padding-right: 0.9em;
+    color: #808080;
+}
+
+QDialog[objectName="ControlPanelDialog"] QFrame[objectName="buttonsContainer"] QPushButton:hover
+{
+    color: #d5d5d5;
+    background-color: transparent;
+}
+
+QDialog[objectName="ControlPanelDialog"] QFrame[objectName="buttonsContainer"] QPushButton[isSelected="true"]
+{
+    background-color: #303030;
+    color: #f5f5f5;
+}
+
+QDialog[objectName="InputResolution"] QPushButton
+{
+    min-height: 2.7em;
 }

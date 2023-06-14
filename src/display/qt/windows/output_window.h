@@ -11,14 +11,7 @@
 #include "display/display.h"
 #include "common/globals.h"
 
-class OutputResolutionDialog;
-class InputResolutionDialog;
-class VideoPresetsDialog;
-class FilterGraphDialog;
-class AntiTearDialog;
-class OverlayDialog;
-class SignalDialog;
-class AboutDialog;
+class ControlPanelDialog;
 class VCSBaseDialog;
 class QAction;
 class MagnifyingGlass;
@@ -26,16 +19,16 @@ class MagnifyingGlass;
 struct resolution_alias_s;
 
 namespace Ui {
-class MainWindow;
+class OutputWindow;
 }
 
-class MainWindow : public QMainWindow
+class OutputWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit OutputWindow(QWidget *parent = 0);
+    ~OutputWindow();
 
     // Gets user input in the GUI, etc.
     void update_gui_state(void);
@@ -59,22 +52,13 @@ public:
     // should not be shown at this time.
     QImage overlay_image(void);
 
-    // Returns true if the user is allowed to scale the output resolution by using the
-    // mouse wheel over the capture window.
-    bool is_mouse_wheel_scaling_allowed(void);
-
     bool apply_global_stylesheet(const QString &qssFilename);
 
     bool set_global_font_size(const unsigned fontSize);
 
-    OutputResolutionDialog* output_resolution_dialog(void) const { return this->outputResolutionDlg; }
-    InputResolutionDialog* input_resolution_dialog(void)   const { return this->inputResolutionDlg; }
-    FilterGraphDialog* filter_graph_dialog(void)           const { return this->filterGraphDlg; }
-    VideoPresetsDialog* video_presets_dialog(void)         const { return this->videoPresetsDlg; }
-    AntiTearDialog* anti_tear_dialog(void)                 const { return this->antitearDlg; }
-    OverlayDialog* overlay_dialog(void)                    const { return this->overlayDlg; }
-    SignalDialog* signal_info_dialog(void)                 const { return this->signalDlg; }
-    AboutDialog* about_dialog(void)                        const { return this->aboutDlg; }
+    void override_window_title(const std::string &newTitle);
+
+    ControlPanelDialog* control_panel(void) const { return this->controlPanelDialog; }
 
 signals:
     void fullscreen_mode_enabled(void);
@@ -100,20 +84,13 @@ private:
 
     void save_screenshot(void);
 
-    Ui::MainWindow *ui = nullptr;
+    Ui::OutputWindow *ui = nullptr;
 
     // The menu items shown when the user right-clicks this window.
     std::vector<QMenu*> contextMenuSubmenus;
     QMenu *contextMenu;
 
-    OutputResolutionDialog *outputResolutionDlg = nullptr;
-    InputResolutionDialog *inputResolutionDlg = nullptr;
-    VideoPresetsDialog *videoPresetsDlg = nullptr;
-    FilterGraphDialog *filterGraphDlg = nullptr;
-    AntiTearDialog *antitearDlg = nullptr;
-    OverlayDialog *overlayDlg = nullptr;
-    SignalDialog *signalDlg = nullptr;
-    AboutDialog *aboutDlg = nullptr;
+    ControlPanelDialog *controlPanelDialog = nullptr;
 
     // A master list of all the dialogs that this window spawns. Will be filled in
     // when we create the dialog instances.

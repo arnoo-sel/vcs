@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>341</width>
-    <height>131</height>
+    <height>130</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -45,7 +45,7 @@
        <number>0</number>
       </property>
       <property name="topMargin">
-       <number>3</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
        <number>0</number>
@@ -56,7 +56,7 @@
       <item>
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
-         <string>Output size</string>
+         <string>Size</string>
         </property>
         <layout class="QGridLayout" name="gridLayout">
          <property name="topMargin">
@@ -71,7 +71,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Scale</string>
+            <string>Relative</string>
            </property>
           </widget>
          </item>
@@ -87,7 +87,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Constant</string>
+            <string>Fixed</string>
            </property>
           </widget>
          </item>
@@ -195,21 +195,21 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="0">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>999999</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
        </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>999999</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

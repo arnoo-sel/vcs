@@ -9,6 +9,8 @@
 
 #include <QPlainTextEdit>
 #include <QFileDialog>
+#include <QStatusBar>
+#include <QCheckBox>
 #include <QDateTime>
 #include <QPainter>
 #include <QMenuBar>
@@ -33,7 +35,43 @@ OverlayDialog::OverlayDialog(QWidget *parent) :
 
     ui->plainTextEdit->setTabStopDistance(22);
 
-    // Create the dialog's menu bar.
+    // Wire up the GUI controls to consequences for operating them.
+    {
+        connect(ui->plainTextEdit, &QPlainTextEdit::textChanged, this, [this]
+        {
+            kpers_set_value(INI_GROUP_OVERLAY, "Content", this->ui->plainTextEdit->toPlainText());
+        });
+
+        connect(this, &VCSBaseDialog::enabled_state_set, this, [](const bool isEnabled)
+        {
+            kpers_set_value(INI_GROUP_OVERLAY, "Enabled", isEnabled);
+        });
+    }
+
+    // Create the status bar.
+    {
+        auto *const statusBar = new QStatusBar();
+        this->layout()->addWidget(statusBar);
+
+        auto *const enable = new QCheckBox("Enabled");
+        {
+            enable->setChecked(this->is_enabled());
+
+            connect(this, &VCSBaseDialog::enabled_state_set, this, [=](const bool isEnabled)
+            {
+                enable->setChecked(isEnabled);
+            });
+
+            connect(enable, &QCheckBox::clicked, this, [=](const bool isEnabled)
+            {
+                this->set_enabled(isEnabled);
+            });
+        }
+
+        statusBar->addPermanentWidget(enable);
+    }
+
+    // Create the menu bar.
     {
         this->menuBar = new QMenuBar(this);
 
@@ -42,32 +80,6 @@ OverlayDialog::OverlayDialog(QWidget *parent) :
             this->ui->plainTextEdit->insertPlainText(text);
             this->ui->plainTextEdit->setFocus();
         };
-
-        // Overlay...
-        {
-            QMenu *overlayMenu = new QMenu("Overlay", this->menuBar);
-
-            {
-                QAction *enable = new QAction("Enabled", this->menuBar);
-                enable->setCheckable(true);
-                enable->setChecked(this->is_enabled());
-
-                connect(this, &VCSBaseDialog::enabled_state_set, this, [=](const bool isEnabled)
-                {
-                    enable->setChecked(isEnabled);
-                    kd_update_output_window_title();
-                });
-
-                connect(enable, &QAction::triggered, this, [=]
-                {
-                    this->set_enabled(!this->is_enabled());
-                });
-
-                overlayMenu->addAction(enable);
-            }
-
-            this->menuBar->addMenu(overlayMenu);
-        }
 
         // Insert...
         {
@@ -166,9 +178,8 @@ OverlayDialog::OverlayDialog(QWidget *parent) :
 
     // Restore persistent settings.
     {
-        ui->plainTextEdit->setPlainText(kpers_value_of(INI_GROUP_OVERLAY, "content", "").toString());
-        this->set_enabled(kpers_value_of(INI_GROUP_OVERLAY, "enabled", false).toBool());
-        this->resize(kpers_value_of(INI_GROUP_GEOMETRY, "overlay", this->size()).toSize());
+        ui->plainTextEdit->setPlainText(kpers_value_of(INI_GROUP_OVERLAY, "Content", "").toString());
+        this->set_enabled(kpers_value_of(INI_GROUP_OVERLAY, "Enabled", false).toBool());
     }
 
     return;
@@ -176,13 +187,6 @@ OverlayDialog::OverlayDialog(QWidget *parent) :
 
 OverlayDialog::~OverlayDialog()
 {
-    // Save persistent settings.
-    {
-        kpers_set_value(INI_GROUP_OVERLAY, "enabled", this->is_enabled());
-        kpers_set_value(INI_GROUP_OVERLAY, "content", ui->plainTextEdit->toPlainText());
-        kpers_set_value(INI_GROUP_GEOMETRY, "overlay", this->size());
-    }
-
     delete ui;
     ui = nullptr;
 

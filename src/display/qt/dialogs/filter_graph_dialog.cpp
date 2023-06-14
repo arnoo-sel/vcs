@@ -2,15 +2,16 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QStatusBar>
+#include <QCheckBox>
 #include <QMenuBar>
 #include <QTimer>
 #include <QLabel>
 #include <functional>
-#include "display/qt/dialogs/filter_graph/base_filter_graph_node.h"
-#include "display/qt/dialogs/filter_graph/filter_node.h"
-#include "display/qt/dialogs/filter_graph/input_gate_node.h"
-#include "display/qt/dialogs/filter_graph/output_gate_node.h"
-#include "display/qt/dialogs/filter_graph/output_scaler_node.h"
+#include "display/qt/dialogs/components/filter_graph_dialog/base_filter_graph_node.h"
+#include "display/qt/dialogs/components/filter_graph_dialog/filter_node.h"
+#include "display/qt/dialogs/components/filter_graph_dialog/input_gate_node.h"
+#include "display/qt/dialogs/components/filter_graph_dialog/output_gate_node.h"
+#include "display/qt/dialogs/components/filter_graph_dialog/output_scaler_node.h"
 #include "display/qt/subclasses/QGraphicsItem_interactible_node_graph_node.h"
 #include "display/qt/subclasses/QGraphicsScene_interactible_node_graph.h"
 #include "display/qt/subclasses/QMenu_dialog_file_menu.h"
@@ -33,27 +34,70 @@ FilterGraphDialog::FilterGraphDialog(QWidget *parent) :
 
     this->setWindowFlags(Qt::Window);
 
-    // Construct the status bar.
+    // Create the status bar.
     {
-        auto *const bar = new QStatusBar();
-        this->layout()->addWidget(bar);
+        auto *const statusBar = new QStatusBar();
+        this->layout()->addWidget(statusBar);
 
-        auto *const viewScale = new QLabel("Zoom level: 1.0");
-
-        connect(ui->graphicsView, &InteractibleNodeGraphView::scale_changed, this, [=](const double newScale)
+        auto *const viewScale = new QLabel("1.0\u00d7");
         {
-            viewScale->setText(QString("Zoom level: %1").arg(QString::number(newScale, 'f', 1)));
-        });
+            connect(ui->graphicsView, &InteractibleNodeGraphView::scale_changed, this, [=](const double newScale)
+            {
+                viewScale->setText(QString("%1\u00d7").arg(QString::number(newScale, 'f', 1)));
+            });
 
-        connect(ui->graphicsView, &InteractibleNodeGraphView::right_clicked_on_background, this, [=](const QPoint &globalPos)
+            connect(ui->graphicsView, &InteractibleNodeGraphView::right_clicked_on_background, this, [=](const QPoint &globalPos)
+            {
+                this->filtersMenu->popup(globalPos);
+            });
+        }
+
+        auto *const filenameIndicator = new QLabel("");
         {
-            this->filtersMenu->popup(globalPos);
-        });
+            connect(this, &VCSBaseDialog::data_filename_changed, this, [=](const QString &newFilename)
+            {
+                filenameIndicator->setText(QFileInfo(newFilename).fileName());
+            });
 
-        bar->addPermanentWidget(viewScale);
+            connect(this, &VCSBaseDialog::unsaved_changes_flag_changed, this, [=](const bool is)
+            {
+                QString baseName = (this->data_filename().isEmpty()? "[Unsaved]" : filenameIndicator->text());
+
+                if (is)
+                {
+                    baseName = ((baseName.front() == '*')? baseName : ("*" + baseName));
+                }
+                else
+                {
+                    baseName = ((baseName.front() == '*')? baseName.mid(1) : baseName);
+                }
+
+                filenameIndicator->setText(baseName);
+            });
+        }
+
+        auto *const enable = new QCheckBox("Enabled");
+        {
+            enable->setChecked(this->is_enabled());
+
+            connect(this, &VCSBaseDialog::enabled_state_set, this, [=](const bool isEnabled)
+            {
+                enable->setChecked(isEnabled);
+            });
+
+            connect(enable, &QCheckBox::clicked, this, [=](const bool isEnabled)
+            {
+                this->set_enabled(isEnabled);
+            });
+        }
+
+        statusBar->addPermanentWidget(viewScale);
+        statusBar->addPermanentWidget(filenameIndicator);
+        statusBar->addPermanentWidget(new QLabel, 1); // Spacer, to push subsequent widgets to the right.
+        statusBar->addPermanentWidget(enable);
     }
 
-    // Create the dialog's menu bar.
+    // Create the menu bar.
     {
         this->menuBar = new QMenuBar(this);
 
@@ -70,21 +114,25 @@ FilterGraphDialog::FilterGraphDialog(QWidget *parent) :
 
             connect(file, &DialogFileMenu::open, this, [=]
             {
-                QString filename = QFileDialog::getOpenFileName(this,
-                                                                "Select a file containing the filter graph to be loaded", "",
-                                                                "Filter graphs (*.vcs-filter-graph);;"
-                                                                "All files(*.*)");
+                QString filename = QFileDialog::getOpenFileName(
+                    this,
+                    "Select a file containing the filter graph to be loaded", "",
+                    "Filter graphs (*.vcs-filter-graph);;"
+                    "All files(*.*)"
+                );
 
                 this->load_graph_from_file(filename);
             });
 
             connect(file, &DialogFileMenu::save_as, this, [=](const QString &originalFilename)
             {
-                QString filename = QFileDialog::getSaveFileName(this,
-                                                                "Select a file to save the filter graph into",
-                                                                originalFilename,
-                                                                "Filter graph files (*.vcs-filter-graph);;"
-                                                                "All files(*.*)");
+                QString filename = QFileDialog::getSaveFileName(
+                    this,
+                    "Select a file to save the filter graph into",
+                    originalFilename,
+                    "Filter graph files (*.vcs-filter-graph);;"
+                    "All files(*.*)"
+                );
 
                 this->save_graph_into_file(filename);
             });
@@ -96,30 +144,7 @@ FilterGraphDialog::FilterGraphDialog(QWidget *parent) :
             });
         }
 
-        // Graph...
-        {
-            QMenu *filterGraphMenu = new QMenu("Graph", this->menuBar);
-
-            QAction *enable = new QAction("Enabled", this->menuBar);
-            enable->setCheckable(true);
-            enable->setChecked(this->is_enabled());
-
-            connect(this, &VCSBaseDialog::enabled_state_set, this, [=](const bool isEnabled)
-            {
-                enable->setChecked(isEnabled);
-            });
-
-            connect(enable, &QAction::triggered, this, [=]
-            {
-                this->set_enabled(!this->is_enabled());
-            });
-
-            filterGraphMenu->addAction(enable);
-
-            this->menuBar->addMenu(filterGraphMenu);
-        }
-
-        // Nodes...
+        // A list of the available filter nodes.
         {
             this->filtersMenu = new QMenu("Filters", this);
 
@@ -217,6 +242,7 @@ FilterGraphDialog::FilterGraphDialog(QWidget *parent) :
         {
             kf_set_filtering_enabled(isEnabled);
             kd_update_output_window_title();
+            kpers_set_value(INI_GROUP_FILTER_GRAPH, "Enabled", isEnabled);
         });
 
         connect(this, &VCSBaseDialog::data_filename_changed, this, [=](const QString &newFilename)
@@ -225,7 +251,7 @@ FilterGraphDialog::FilterGraphDialog(QWidget *parent) :
             // are loaded in. Let's just force it to do so.
             this->refresh_filter_graph();
 
-            kpers_set_value(INI_GROUP_FILTER_GRAPH, "graph_source_file", newFilename);
+            kpers_set_value(INI_GROUP_FILTER_GRAPH, "SourceFile", newFilename);
         });
     }
 
@@ -279,12 +305,11 @@ FilterGraphDialog::FilterGraphDialog(QWidget *parent) :
     // Restore persistent settings.
     this->reset_graph(true);
     {
-        this->set_enabled(kpers_value_of(INI_GROUP_OUTPUT, "custom_filtering", kf_is_filtering_enabled()).toBool());
-        this->resize(kpers_value_of(INI_GROUP_GEOMETRY, "filter_graph", this->size()).toSize());
+        this->set_enabled(kpers_value_of(INI_GROUP_FILTER_GRAPH, "Enabled", kf_is_filtering_enabled()).toBool());
 
         if (kcom_filter_graph_file_name().empty())
         {
-            const QString graphSourceFilename = kpers_value_of(INI_GROUP_FILTER_GRAPH, "graph_source_file", QString("")).toString();
+            const QString graphSourceFilename = kpers_value_of(INI_GROUP_FILTER_GRAPH, "SourceFile", QString("")).toString();
             kcom_override_filter_graph_file_name(graphSourceFilename.toStdString());
         }
     }
@@ -294,12 +319,6 @@ FilterGraphDialog::FilterGraphDialog(QWidget *parent) :
 
 FilterGraphDialog::~FilterGraphDialog()
 {
-    // Save persistent settings.
-    {
-        kpers_set_value(INI_GROUP_OUTPUT, "custom_filtering", this->is_enabled());
-        kpers_set_value(INI_GROUP_GEOMETRY, "filter_graph", this->size());
-    }
-
     delete ui;
 
     return;

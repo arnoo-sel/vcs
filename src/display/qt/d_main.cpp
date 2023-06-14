@@ -14,8 +14,7 @@
 #include "display/qt/windows/output_window.h"
 #include "display/qt/dialogs/video_presets_dialog.h"
 #include "display/qt/dialogs/filter_graph_dialog.h"
-#include "display/qt/dialogs/output_resolution_dialog.h"
-#include "display/qt/dialogs/signal_dialog.h"
+#include "display/qt/dialogs/control_panel_dialog.h"
 #include "capture/capture.h"
 #include "common/globals.h"
 #include "filter/filter.h"
@@ -36,14 +35,14 @@ namespace app_n
 }
 
 // The window we'll display the program in. Also owns the various sub-dialogs, etc.
-static MainWindow *WINDOW = nullptr;
+static OutputWindow *WINDOW = nullptr;
 
 #define ASSERT_WINDOW_IS_NOT_NULL k_assert(WINDOW, "Tried to query the display before it had been initialized.");
 
 void kd_recalculate_filter_graph_chains(void)
 {
     ASSERT_WINDOW_IS_NOT_NULL;
-    WINDOW->filter_graph_dialog()->recalculate_filter_chains();
+    WINDOW->control_panel()->filter_graph()->recalculate_filter_chains();
 
     return;
 }
@@ -55,7 +54,7 @@ subsystem_releaser_t kd_acquire_output_window(void)
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
     app_n::APP = new QApplication(app_n::ARGC, &app_n::ARGV);
 
-    WINDOW = new MainWindow;
+    WINDOW = new OutputWindow;
     WINDOW->show();
 
     return []{
@@ -98,13 +97,13 @@ void kd_update_output_window_size(void)
 void kd_load_video_presets(const std::string &filename)
 {
     ASSERT_WINDOW_IS_NOT_NULL;
-    WINDOW->video_presets_dialog()->load_presets_from_file(QString::fromStdString(filename));
+    WINDOW->control_panel()->video_presets()->load_presets_from_file(QString::fromStdString(filename));
 }
 
 void kd_load_filter_graph(const std::string &filename)
 {
     ASSERT_WINDOW_IS_NOT_NULL;
-    WINDOW->filter_graph_dialog()->load_graph_from_file(QString::fromStdString(filename));
+    WINDOW->control_panel()->filter_graph()->load_graph_from_file(QString::fromStdString(filename));
 }
 
 bool kd_is_fullscreen(void)

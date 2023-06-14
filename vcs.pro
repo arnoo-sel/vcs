@@ -62,11 +62,21 @@ RESOURCES += \
     src/display/qt/res.qrc
 
 SOURCES += \
-    src/display/qt/dialogs/filter_graph/base_filter_graph_node.cpp \
-    src/display/qt/dialogs/filter_graph/output_scaler_node.cpp \
-    src/display/qt/dialogs/input_channel_select.cpp \
+    src/display/qt/dialogs/components/capture_dialog/deinterlacing_mode.cpp \
+    src/display/qt/dialogs/components/capture_dialog/device_info.cpp \
+    src/display/qt/dialogs/components/capture_dialog/input_channel.cpp \
+    src/display/qt/dialogs/components/capture_dialog/input_resolution.cpp \
+    src/display/qt/dialogs/components/capture_dialog/signal_status.cpp \
+    src/display/qt/dialogs/components/filter_graph_dialog/base_filter_graph_node.cpp \
+    src/display/qt/dialogs/components/filter_graph_dialog/output_scaler_node.cpp \
+    src/display/qt/dialogs/control_panel_dialog.cpp \
     src/display/qt/dialogs/video_presets_dialog.cpp \
+    src/display/qt/dialogs/components/window_options_dialog/window_renderer.cpp \
+    src/display/qt/dialogs/components/window_options_dialog/window_scaler.cpp \
+    src/display/qt/dialogs/components/window_options_dialog/window_size.cpp \
+    src/display/qt/dialogs/window_options_dialog.cpp \
     src/display/qt/keyboard_shortcuts.cpp \
+    src/display/qt/dialogs/capture_dialog.cpp \
     src/filter/filters/output_scaler/filter_output_scaler.cpp \
     src/filter/filters/output_scaler/gui/filtergui_output_scaler.cpp \
     src/filter/filters/render_text/filter_render_text.cpp \
@@ -85,7 +95,6 @@ SOURCES += \
     src/display/qt/dialogs/resolution_dialog.cpp \
     src/display/qt/d_main.cpp \
     src/display/qt/dialogs/overlay_dialog.cpp \
-    src/display/qt/dialogs/anti_tear_dialog.cpp \
     src/anti_tear/anti_tear_multiple_per_frame.cpp \
     src/anti_tear/anti_tear_one_per_frame.cpp \
     src/anti_tear/anti_tearer.cpp \
@@ -137,10 +146,7 @@ SOURCES += \
     src/display/qt/subclasses/QGraphicsView_interactible_node_graph_view.cpp \
     src/display/qt/dialogs/filter_graph_dialog.cpp \
     src/display/qt/dialogs/about_dialog.cpp \
-    src/display/qt/dialogs/output_resolution_dialog.cpp \
-    src/display/qt/dialogs/input_resolution_dialog.cpp \
     src/display/qt/subclasses/QTableWidget_property_table.cpp \
-    src/display/qt/dialogs/signal_dialog.cpp \
     src/common/disk/file_writers/file_writer_filter_graph_version_b.cpp \
     src/common/disk/file_reader.cpp \
     src/common/disk/file_readers/file_reader_filter_graph_version_b.cpp \
@@ -150,9 +156,9 @@ SOURCES += \
     src/common/disk/file_writer.cpp \
     src/common/disk/file_writers/file_writer_video_params_version_a.cpp \
     src/common/disk/file_readers/file_reader_video_params_version_a.cpp \
-    src/display/qt/dialogs/filter_graph/output_gate_node.cpp \
-    src/display/qt/dialogs/filter_graph/input_gate_node.cpp \
-    src/display/qt/dialogs/filter_graph/filter_node.cpp \
+    src/display/qt/dialogs/components/filter_graph_dialog/output_gate_node.cpp \
+    src/display/qt/dialogs/components/filter_graph_dialog/input_gate_node.cpp \
+    src/display/qt/dialogs/components/filter_graph_dialog/filter_node.cpp \
     src/capture/video_presets.cpp \
     src/common/disk/file_writers/file_writer_video_presets_version_a.cpp \
     src/common/disk/file_readers/file_reader_video_presets_version_a.cpp \
@@ -162,11 +168,21 @@ HEADERS += \
     src/common/assert.h \
     src/common/globals.h \
     src/common/types.h \
-    src/display/qt/dialogs/filter_graph/base_filter_graph_node.h \
-    src/display/qt/dialogs/filter_graph/output_scaler_node.h \
-    src/display/qt/dialogs/input_channel_select.h \
+    src/display/qt/dialogs/components/capture_dialog/deinterlacing_mode.h \
+    src/display/qt/dialogs/components/capture_dialog/device_info.h \
+    src/display/qt/dialogs/components/capture_dialog/input_channel.h \
+    src/display/qt/dialogs/components/capture_dialog/input_resolution.h \
+    src/display/qt/dialogs/components/capture_dialog/signal_status.h \
+    src/display/qt/dialogs/components/filter_graph_dialog/base_filter_graph_node.h \
+    src/display/qt/dialogs/components/filter_graph_dialog/output_scaler_node.h \
+    src/display/qt/dialogs/control_panel_dialog.h \
     src/display/qt/dialogs/video_presets_dialog.h \
+    src/display/qt/dialogs/components/window_options_dialog/window_renderer.h \
+    src/display/qt/dialogs/components/window_options_dialog/window_scaler.h \
+    src/display/qt/dialogs/components/window_options_dialog/window_size.h \
+    src/display/qt/dialogs/window_options_dialog.h \
     src/display/qt/keyboard_shortcuts.h \
+    src/display/qt/dialogs/capture_dialog.h \
     src/display/qt/subclasses/QComboBox_video_preset_list.h \
     src/display/qt/subclasses/QDialog_vcs_base_dialog.h \
     src/display/qt/subclasses/QFrame_filtergui_for_qt.h \
@@ -230,7 +246,6 @@ HEADERS += \
     src/common/log/log.h \
     src/display/qt/dialogs/overlay_dialog.h \
     src/anti_tear/anti_tear.h \
-    src/display/qt/dialogs/anti_tear_dialog.h \
     src/filter/filter.h \
     src/common/command_line/command_line.h \
     src/display/qt/persistent_settings.h \
@@ -243,11 +258,8 @@ HEADERS += \
     src/display/qt/subclasses/QGraphicsView_interactible_node_graph_view.h \
     src/display/qt/dialogs/filter_graph_dialog.h \
     src/display/qt/dialogs/about_dialog.h \
-    src/display/qt/dialogs/output_resolution_dialog.h \
-    src/display/qt/dialogs/input_resolution_dialog.h \
     src/display/display.h \
     src/display/qt/subclasses/QTableWidget_property_table.h \
-    src/display/qt/dialogs/signal_dialog.h \
     src/common/disk/file_writers/file_writer_filter_graph.h \
     src/common/disk/file_readers/file_reader_filter_graph.h \
     src/common/disk/file_reader.h \
@@ -255,9 +267,9 @@ HEADERS += \
     src/common/disk/file_readers/file_reader_video_params.h \
     src/common/disk/file_writers/file_writer_video_params.h \
     src/common/disk/file_writer.h \
-    src/display/qt/dialogs/filter_graph/output_gate_node.h \
-    src/display/qt/dialogs/filter_graph/input_gate_node.h \
-    src/display/qt/dialogs/filter_graph/filter_node.h \
+    src/display/qt/dialogs/components/filter_graph_dialog/output_gate_node.h \
+    src/display/qt/dialogs/components/filter_graph_dialog/input_gate_node.h \
+    src/display/qt/dialogs/components/filter_graph_dialog/filter_node.h \
     src/common/refresh_rate.h \
     src/capture/video_presets.h \
     src/common/disk/file_writers/file_writer_video_presets.h \
@@ -266,17 +278,23 @@ HEADERS += \
     src/common/timer/timer.h
 
 FORMS += \
-    src/display/qt/dialogs/ui/input_channel_select.ui \
+    src/display/qt/dialogs/components/capture_dialog/ui/deinterlacing_mode.ui \
+    src/display/qt/dialogs/components/capture_dialog/ui/device_info.ui \
+    src/display/qt/dialogs/components/capture_dialog/ui/input_channel.ui \
+    src/display/qt/dialogs/components/capture_dialog/ui/input_resolution.ui \
+    src/display/qt/dialogs/components/capture_dialog/ui/signal_status.ui \
+    src/display/qt/dialogs/ui/control_panel_dialog.ui \
     src/display/qt/dialogs/ui/video_presets_dialog.ui \
+    src/display/qt/dialogs/ui/window_options_dialog.ui \
+    src/display/qt/dialogs/components/window_options_dialog/ui/window_renderer.ui \
+    src/display/qt/dialogs/components/window_options_dialog/ui/window_scaler.ui \
+    src/display/qt/dialogs/components/window_options_dialog/ui/window_size.ui \
+    src/display/qt/dialogs/ui/capture_dialog.ui \
     src/display/qt/windows/ui/output_window.ui \
     src/display/qt/dialogs/ui/overlay_dialog.ui \
     src/display/qt/dialogs/ui/resolution_dialog.ui \
-    src/display/qt/dialogs/ui/anti_tear_dialog.ui \
     src/display/qt/dialogs/ui/filter_graph_dialog.ui \
     src/display/qt/dialogs/ui/about_dialog.ui \
-    src/display/qt/dialogs/ui/output_resolution_dialog.ui \
-    src/display/qt/dialogs/ui/input_resolution_dialog.ui \
-    src/display/qt/dialogs/ui/signal_dialog.ui
 
 contains(DEFINES, CAPTURE_BACKEND_VIRTUAL) {
     SOURCES += src/capture/virtual/capture_virtual.cpp

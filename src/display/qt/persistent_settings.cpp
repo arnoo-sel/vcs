@@ -23,7 +23,7 @@ void kpers_initialize(void)
 //
 static QString as_key(const QString &group, const QString &name)
 {
-    return QString("%1/%2").arg(group.toUpper()).arg(name.toUpper());
+    return QString("%1/%2").arg(group).arg(name);
 }
 
 QVariant kpers_value_of(const QString &group, const QString &name, const QVariant &defaultValue)

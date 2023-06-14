@@ -1,7 +1,9 @@
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QStatusBar>
 #include <QMenuBar>
 #include <QTimer>
+#include <QDebug>
 #include <functional>
 #include <cstring>
 #include "display/qt/subclasses/QComboBox_video_preset_list.h"
@@ -46,7 +48,41 @@ VideoPresetsDialog::VideoPresetsDialog(QWidget *parent) :
 
     this->set_name("Video presets");
 
-    // Create the dialog's menu bar.
+    // Create the status bar.
+    {
+        auto *const statusBar = new QStatusBar();
+        this->layout()->addWidget(statusBar);
+
+        auto *const filenameIndicator = new QLabel("");
+        {
+            connect(this, &VCSBaseDialog::data_filename_changed, this, [=](const QString &newFilename)
+            {
+
+                qDebug() << QFileInfo(newFilename).fileName();
+                filenameIndicator->setText(QFileInfo(newFilename).fileName());
+            });
+
+            connect(this, &VCSBaseDialog::unsaved_changes_flag_changed, this, [=](const bool is)
+            {
+                QString baseName = (this->data_filename().isEmpty()? "[Unsaved]" : filenameIndicator->text());
+
+                if (is)
+                {
+                    baseName = ((baseName.front() == '*')? baseName : ("*" + baseName));
+                }
+                else
+                {
+                    baseName = ((baseName.front() == '*')? baseName.mid(1) : baseName);
+                }
+
+                filenameIndicator->setText(baseName);
+            });
+        }
+
+        statusBar->addPermanentWidget(filenameIndicator);
+    }
+
+    // Create the menu bar.
     {
         this->menuBar = new QMenuBar(this);
 
@@ -98,8 +134,6 @@ VideoPresetsDialog::VideoPresetsDialog(QWidget *parent) :
 
     // Set the GUI controls to their proper initial values.
     {
-        ui->label_warnOfDigitalInput->setVisible(false);
-
         // The file format we save presets into reserves the { and } characters;
         // these characters shouldn't occur in preset names.
         ui->lineEdit_presetName->setValidator(new QRegularExpressionValidator(QRegularExpression("[^{}]*"), this));
@@ -146,7 +180,7 @@ VideoPresetsDialog::VideoPresetsDialog(QWidget *parent) :
 
         connect(this, &VCSBaseDialog::data_filename_changed, this, [this](const QString &newFilename)
         {
-            kpers_set_value(INI_GROUP_VIDEO_PRESETS, "presets_source_file", newFilename);
+            kpers_set_value(INI_GROUP_VIDEO_PRESETS, "SourceFile", newFilename);
         });
 
         connect(ui->comboBox_presetList, &VideoPresetList::preset_selected, this, [this]
@@ -382,14 +416,10 @@ VideoPresetsDialog::VideoPresetsDialog(QWidget *parent) :
     }
 
     // Restore persistent settings.
+    if (kcom_video_presets_file_name().empty())
     {
-        this->resize(kpers_value_of(INI_GROUP_GEOMETRY, "video_parameters", this->size()).toSize());
-
-        if (kcom_video_presets_file_name().empty())
-        {
-            const QString presetsSourceFile = kpers_value_of(INI_GROUP_VIDEO_PRESETS, "presets_source_file", QString()).toString();
-            kcom_override_video_presets_file_name(presetsSourceFile.toStdString());
-        }
+        const QString presetsSourceFile = kpers_value_of(INI_GROUP_VIDEO_PRESETS, "SourceFile", QString()).toString();
+        kcom_override_video_presets_file_name(presetsSourceFile.toStdString());
     }
 
     // Register app event listeners.
@@ -402,13 +432,11 @@ VideoPresetsDialog::VideoPresetsDialog(QWidget *parent) :
             }
 
             this->update_active_preset_indicator();
-            this->ui->label_warnOfDigitalInput->setVisible(kc_current_capture_state().signalFormat == signal_format_e::digital);
         });
 
         kc_evSignalLost.listen([this]
         {
             this->update_active_preset_indicator();
-            this->ui->label_warnOfDigitalInput->setVisible(false);
         });
     }
 
@@ -428,11 +456,6 @@ VideoPresetsDialog::VideoPresetsDialog(QWidget *parent) :
 
 VideoPresetsDialog::~VideoPresetsDialog()
 {
-    // Save persistent settings.
-    {
-        kpers_set_value(INI_GROUP_GEOMETRY, "video_parameters", this->size());
-    }
-
     delete ui;
 
     return;

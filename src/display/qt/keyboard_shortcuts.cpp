@@ -17,19 +17,11 @@
 
 static const std::unordered_map<std::string, QKeySequence> KEY_SEQUENCES = {
     {"output-window: exit-fullscreen-mode", QKeySequence("esc")},
-    {"output-window: snap-to-left", QKeySequence("f2")},
     {"output-window: toggle-fullscreen-mode", QKeySequence("f11")},
     {"output-window: toggle-window-border", QKeySequence("f1")},
     {"output-window: set-input-channel-1", QKeySequence("shift+1")},
     {"output-window: set-input-channel-2", QKeySequence("shift+2")},
-    {"output-window: open-input-resolution-dialog", QKeySequence("ctrl+i")},
-    {"output-window: open-signal-info-dialog", QKeySequence("ctrl+s")},
-    {"output-window: open-video-presets-dialog", QKeySequence("ctrl+v")},
-    {"output-window: open-anti-tear-dialog", QKeySequence("ctrl+a")},
-    {"output-window: open-filter-graph-dialog", QKeySequence("ctrl+f")},
-    {"output-window: open-overlay-dialog", QKeySequence("ctrl+l")},
-    {"output-window: open-output-resolution-dialog", QKeySequence("ctrl+o")},
-    {"output-window: open-record-dialog", QKeySequence("ctrl+r")},
+    {"output-window: open-control-panel-dialog", QKeySequence("ctrl+q")},
 
     {"video-preset-dialog: preset-activator-1", QKeySequence("ctrl+f1")},
     {"video-preset-dialog: preset-activator-2", QKeySequence("ctrl+f2")},
@@ -54,12 +46,10 @@ static const std::unordered_map<std::string, QKeySequence> KEY_SEQUENCES = {
     {"input-resolution-dialog: resolution-activator-8", QKeySequence("ctrl+8")},
     {"input-resolution-dialog: resolution-activator-9", QKeySequence("ctrl+9")},
 
-    {"filter-graph-dialog: toggle-enabled", QKeySequence("ctrl+shift+f")},
     {"filter-graph-dialog: delete-selected-nodes", QKeySequence("shift+del")},
 
-    {"overlay-dialog: toggle-enabled", QKeySequence("ctrl+shift+l")},
-
-    {"anti-tear-dialog: toggle-enabled", QKeySequence("ctrl+shift+a")},
+    {"filter-graph-dialog: toggle-enabled", QKeySequence("ctrl+shift+f")},
+    {"overlay-dialog: toggle-enabled", QKeySequence("ctrl+shift+o")},
 };
 
 #define ASSERT_LABEL_VALIDITY(label) \
