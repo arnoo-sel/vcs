@@ -8,8 +8,8 @@ Below is the original README:
 
 A well-featured control application for Datapath's VisionRGB capture cards, with a feature-set targeted especially at retro enthusiasts.
 
-![VCS 2.4](./images/vcs-2.4-with-dialogs.png)\
-*A screenshot of VCS 2.4 showing the capture window (in the background) and some of the control dialogs.*
+![VCS 2.8](./images/vcs-2.8.png)\
+*A screenshot of VCS 2.8 showing the capture window (in the background) and some of the control options.*
 
 ## Features
 
