@@ -4,3 +4,5 @@ misc/
 docs/developer-manual/xml/
 generated_files/
 *.pro.user
+CMakeLists.txt.user
+CMakeFiles/
