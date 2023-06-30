@@ -44,10 +44,13 @@ ControlPanelDialog::ControlPanelDialog(OutputWindow *parent) :
                 ui->contentsScroller->setWidget(dialog);
                 dialog->show();
 
-                foreach (auto *const childButton, this->ui->verticalLayout->children())
+                foreach (auto *const child, this->ui->buttonsContainer->children())
                 {
-                    childButton->setProperty("isSelected", ((childButton == naviButton)? "true" : "false"));
-                    this->style()->polish(dynamic_cast<QWidget*>(childButton));
+                    if (auto* childButton = dynamic_cast<QWidget*>(child))
+                    {
+                        childButton->setProperty("isSelected", ((childButton == naviButton)? "true" : "false"));
+                        this->style()->polish(dynamic_cast<QWidget*>(childButton));
+                    }
                 };
             });
 
