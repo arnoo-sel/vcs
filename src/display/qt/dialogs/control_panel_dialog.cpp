@@ -44,7 +44,7 @@ ControlPanelDialog::ControlPanelDialog(OutputWindow *parent) :
                 ui->contentsScroller->setWidget(dialog);
                 dialog->show();
 
-                foreach (auto *const childButton, this->ui->buttonsContainer->children())
+                foreach (auto *const childButton, this->ui->verticalLayout->children())
                 {
                     childButton->setProperty("isSelected", ((childButton == naviButton)? "true" : "false"));
                     this->style()->polish(dynamic_cast<QWidget*>(childButton));
