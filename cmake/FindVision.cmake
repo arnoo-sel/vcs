@@ -24,7 +24,7 @@ if (Vision_DIR)
             RGBEASY/C/LIB/x64/Release
             C/LIB/x64/Release
             LIB/x64/Release)
-        
+
     find_library(
         VISION_LIBRARY_DEBUG
         NAMES RGBEASY.lib
@@ -54,7 +54,7 @@ else()
         VISION_LIBRARY_RELEASE
         NAMES RGBEASY.lib
         PATH_SUFFIXES Vision/SDK/RGBEASY/C/LIB/x64/Release)
-        
+
     find_library(
         VISION_LIBRARY_DEBUG
         NAMES RGBEASY.lib
@@ -92,11 +92,11 @@ if(VISION_FOUND AND NOT TARGET vision::vision_debug AND NOT TARGET vision::visio
         vision::vision_debug
         PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${VISION_INCLUDE_DIR}"
-        IMPORTED_LOCATION ${VISION_LIBRARY_DEBUG})
+        IMPORTED_LOCATION "${VISION_LIBRARY_DEBUG}")
 
     set_target_properties(
         vision::vision_release
         PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${VISION_INCLUDE_DIR}"
-        IMPORTED_LOCATION ${VISION_LIBRARY_RELEASE})  
+        IMPORTED_LOCATION "${VISION_LIBRARY_RELEASE}")
 endif()

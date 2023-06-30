@@ -313,7 +313,7 @@ if (${VCS_CHOSEN_CAPTURE_BACKEND} STREQUAL rgbeasy)
     list(APPEND vcs_sources src/capture/rgbeasy/capture_rgbeasy.cpp)
 elseif (${VCS_CHOSEN_CAPTURE_BACKEND} STREQUAL vision-v4l)
     list(
-        APPEND vcs_sources 
+        APPEND vcs_sources
         src/capture/vision_v4l/capture_vision_v4l.cpp
         src/capture/vision_v4l/ic_v4l_video_parameters.cpp
         src/capture/vision_v4l/ic_v4l_video_parameters.h
@@ -332,9 +332,6 @@ qt_add_executable(vcs
 #     WIN32_EXECUTABLE ON
 # )
 
-# Defines the macros
-add_custom_target(genexdebug COMMAND ${CMAKE_COMMAND} -E echo "$<CONFIG:Debug>")
-
 target_compile_definitions(vcs PRIVATE $<$<NOT:$<CONFIG:Debug>>:VCS_RELEASE_BUILD>)
 if (${VCS_CHOSEN_CAPTURE_BACKEND} STREQUAL rgbeasy)
     target_compile_definitions(vcs PRIVATE CAPTURE_BACKEND_RGBEASY)
@@ -352,7 +349,7 @@ target_include_directories(vcs PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 # Set the dependencies
 target_link_libraries(
-    vcs PRIVATE 
+    vcs PRIVATE
     Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGL Qt6::OpenGLWidgets
     ${OpenCV_LIBS})
 if (${VCS_CHOSEN_CAPTURE_BACKEND} STREQUAL rgbeasy)
