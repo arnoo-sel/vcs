@@ -10,7 +10,6 @@
 #include "common/globals.h"
 #include "common/propagate/vcs_event.h"
 #include "capture/capture.h"
-#include "capture/alias.h"
 
 #if _WIN32
     #include <windows.h>

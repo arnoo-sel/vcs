@@ -81,8 +81,6 @@ set(vcs_sources
     src/anti_tear/anti_tear.h
     src/anti_tear/anti_tearer.cpp
     src/anti_tear/anti_tearer.h
-    src/capture/alias.cpp
-    src/capture/alias.h
     src/capture/capture.cpp
     src/capture/capture.h
     src/capture/video_presets.cpp
@@ -95,8 +93,6 @@ set(vcs_sources
     src/common/disk/disk.h
     src/common/disk/file_reader.cpp
     src/common/disk/file_reader.h
-    src/common/disk/file_readers/file_reader_aliases_legacy_1_6_5.cpp
-    src/common/disk/file_readers/file_reader_aliases_version_a.cpp
     src/common/disk/file_readers/file_reader_filter_graph_version_a.cpp
     src/common/disk/file_readers/file_reader_filter_graph_version_b.cpp
     src/common/disk/file_readers/file_reader_filter_graph.h
@@ -108,8 +104,6 @@ set(vcs_sources
     src/common/disk/file_streamer.h
     src/common/disk/file_writer.cpp
     src/common/disk/file_writer.h
-    src/common/disk/file_writers/file_writer_aliases_version_a.cpp
-    src/common/disk/file_writers/file_writer_aliases.h
     src/common/disk/file_writers/file_writer_filter_graph_version_b.cpp
     src/common/disk/file_writers/file_writer_filter_graph.h
     src/common/disk/file_writers/file_writer_video_params_legacy_1_6_5.cpp
@@ -131,8 +125,6 @@ set(vcs_sources
     src/display/qt/d_main.cpp
     src/display/qt/dialogs/about_dialog.cpp
     src/display/qt/dialogs/about_dialog.h
-    src/display/qt/dialogs/alias_dialog.cpp
-    src/display/qt/dialogs/alias_dialog.h
     src/display/qt/dialogs/anti_tear_dialog.cpp
     src/display/qt/dialogs/anti_tear_dialog.h
     src/display/qt/dialogs/filter_graph_dialog.cpp
@@ -283,7 +275,6 @@ set(vcs_sources
     src/scaler/scaler.h
 
     src/display/qt/dialogs/ui/about_dialog.ui
-    src/display/qt/dialogs/ui/alias_dialog.ui
     src/display/qt/dialogs/ui/anti_tear_dialog.ui
     src/display/qt/dialogs/ui/filter_graph_dialog.ui
     src/display/qt/dialogs/ui/input_channel_select.ui
