@@ -2,6 +2,9 @@
 
 This fork of leikareipa's VCS aim to maintain a 64-bit Windows version, and provide executables for it.
 
+**Note**: release v2.6.1 and v2.7.0 have been reported not to be compatible with the VisionRGB-PRO series of PCI (non-express) cards.
+I'm looking into ways to restore compatibility for later releases. See issue #7.
+
 Below is the original README:
 
 # VCS
